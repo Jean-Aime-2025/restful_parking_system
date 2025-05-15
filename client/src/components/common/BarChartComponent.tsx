@@ -56,7 +56,7 @@ export function BarChartComponent() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="total" fill="var(--color-total)" radius={8}>
+            <Bar dataKey="total" fill="var(--color-total)" radius={8} barSize={180}>
               <LabelList
                 position="top"
                 offset={12}

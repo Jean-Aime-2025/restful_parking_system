@@ -19,7 +19,7 @@ import {
 import { type ChartConfig } from "@/components/ui/chart";
 
 const chartData = [
-  { status: "Available", count: 75, fill: "var(--color-available)" },
+  { status: "Available", count: 75, fill: "#21201d" },
   { status: "Occupied", count: 60, fill: "var(--color-occupied)" },
 ];
 

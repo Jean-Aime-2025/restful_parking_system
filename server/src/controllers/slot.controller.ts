@@ -1,0 +1,121 @@
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// Create Slot
+const createSlot = async (req: Request, res: Response) => {
+  const { code, occupied = false, description } = req.body;
+
+  if (!code) return res.status(400).json({ error: 'Slot code is required' });
+
+  try {
+    const slot = await prisma.slot.create({
+      data: {
+        code,
+        occupied,
+        description,
+      },
+    });
+    return res.status(201).json(slot);
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: 'Failed to create slot', details: error.message });
+  }
+};
+
+// Update Slot
+const updateSlot = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { code, occupied, description } = req.body;
+
+  try {
+    const slot = await prisma.slot.update({
+      where: { id }, // 🔄 No parseInt
+      data: {
+        code,
+        occupied,
+        description,
+      },
+    });
+    return res.json(slot);
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: 'Failed to update slot', details: error.message });
+  }
+};
+
+// Delete Slot
+const deleteSlot = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.slot.delete({
+      where: { id }, // 🔄 No parseInt
+    });
+    return res.json({ message: 'Slot deleted successfully' });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: 'Failed to delete slot', details: error.message });
+  }
+};
+
+// Assign Slot to User
+const assignSlot = async (req: Request, res: Response) => {
+  const { slotId, userId } = req.body;
+
+  if (!slotId || !userId) {
+    return res.status(400).json({ error: 'slotId and userId are required' });
+  }
+
+  try {
+    const updatedSlot = await prisma.slot.update({
+      where: { id: slotId }, // 🔄 No parseInt
+      data: {
+        user: { connect: { id: userId } },
+        occupied: true,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        assignedSlotId: slotId, // 🔄 No parseInt
+      },
+    });
+
+    return res.json({
+      message: 'Slot assigned to user successfully',
+      slot: updatedSlot,
+    });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: 'Failed to assign slot', details: error.message });
+  }
+};
+
+// Get All Slots
+const getAllSlots = async (_req: Request, res: Response) => {
+  try {
+    const slots = await prisma.slot.findMany({ include: { user: true } });
+    return res.json(slots);
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: 'Failed to fetch slots', details: error.message });
+  }
+};
+
+const slotController = {
+  createSlot,
+  updateSlot,
+  deleteSlot,
+  assignSlot,
+  getAllSlots,
+};
+
+export default slotController;
