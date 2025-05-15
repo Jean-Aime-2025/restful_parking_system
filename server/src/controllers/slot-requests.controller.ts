@@ -42,21 +42,19 @@ const getAllRequestsHandler:any = async (req: AuthRequest, res: Response) => {
   return res.json({ requests });
 };
 
-const acceptRequestHandler:any = async (req: AuthRequest, res: Response) => {
+const acceptRequestHandler: any = async (req: AuthRequest, res: Response) => {
   const adminUser = await prisma.user.findUnique({ where: { id: req.user.id } });
   if (adminUser?.role !== "ADMIN") return res.status(403).json({ message: "Forbidden" });
 
-  const requestId = Number(req.params.requestId);
+  const requestId = req.params.requestId; // changed from Number()
 
   const request = await prisma.parkingRequest.findUnique({ where: { id: requestId } });
   if (!request) return res.status(404).json({ message: "Request not found" });
   if (request.status !== "PENDING") return res.status(400).json({ message: "Request already handled" });
 
-  // find available slot
   const availableSlot = await prisma.slot.findFirst({ where: { occupied: false } });
   if (!availableSlot) return res.status(400).json({ message: "No available slots" });
 
-  // assign slot to user
   await prisma.user.update({
     where: { id: request.userId },
     data: {
@@ -64,13 +62,11 @@ const acceptRequestHandler:any = async (req: AuthRequest, res: Response) => {
     },
   });
 
-  // update slot
   await prisma.slot.update({
     where: { id: availableSlot.id },
     data: { occupied: true },
   });
 
-  // update request status
   const updatedRequest = await prisma.parkingRequest.update({
     where: { id: requestId },
     data: { status: "APPROVED" },
@@ -79,11 +75,11 @@ const acceptRequestHandler:any = async (req: AuthRequest, res: Response) => {
   return res.json({ message: "Request approved", request: updatedRequest });
 };
 
-const rejectRequestHandler:any = async (req: AuthRequest, res: Response) => {
+const rejectRequestHandler: any = async (req: AuthRequest, res: Response) => {
   const adminUser = await prisma.user.findUnique({ where: { id: req.user.id } });
   if (adminUser?.role !== "ADMIN") return res.status(403).json({ message: "Forbidden" });
 
-  const requestId = Number(req.params.requestId);
+  const requestId = req.params.requestId; // changed from Number()
 
   const request = await prisma.parkingRequest.findUnique({ where: { id: requestId } });
   if (!request) return res.status(404).json({ message: "Request not found" });
