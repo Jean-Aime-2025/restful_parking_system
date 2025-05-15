@@ -97,7 +97,6 @@ const rejectRequestHandler:any = async (req: AuthRequest, res: Response) => {
   return res.json({ message: "Request rejected", request: rejected });
 };
 
-
 const slotRequestsController = {
     requestSlotHandler,
     getAllRequestsHandler,
