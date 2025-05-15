@@ -1,0 +1,36 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from '@/components/ui/dialog';
+import SlotForm from './slot-form';
+import { Button } from '../ui/button';
+
+type SlotFormDialogProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void
+};
+
+const SlotFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
+        <DialogHeader>
+          <DialogTitle className="text-3xl font-semibold">
+            Create New Slot
+          </DialogTitle>
+        </DialogHeader>
+        <SlotForm />
+        <DialogClose asChild>
+          <Button variant="outline" className="w-full">
+            Cancel
+          </Button>
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default SlotFormDialog;

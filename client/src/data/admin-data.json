@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "slotCode":"A001",
+    "status":"available"
+  },
+  {
+    "id": 2,
+    "slotCode":"A002",
+    "status":"occupied"
+  },
+  {
+    "id": 3,
+    "slotCode":"A003",
+    "status":"occupied"
+  },
+  {
+    "id": 4,
+    "slotCode":"A004",
+    "status":"available"
+  },
+  {
+    "id": 5,
+    "slotCode":"A005",
+    "status":"occupied"
+  },
+  {
+    "id": 6,
+    "slotCode":"A006",
+    "status":"available"
+  },
+  {
+    "id": 7,
+    "slotCode":"A007",
+    "status":"occupied"
+  },
+  {
+    "id": 8,
+    "slotCode":"A008",
+    "status":"occupied"
+  },
+  {
+    "id": 9,
+    "slotCode":"A009",
+    "status":"occupied"
+  },
+  {
+    "id": 10,
+    "slotCode":"A010",
+    "status":"available"
+  },
+  {
+    "id": 11,
+    "slotCode":"A011",
+    "status":"occupied"
+  },
+  {
+    "id": 12,
+    "slotCode":"A012",
+    "status":"available"
+  },
+  {
+    "id": 13,
+    "slotCode":"A013",
+    "status":"occupied"
+  },
+  {
+    "id": 14,
+    "slotCode":"A014",
+    "status":"occupied"
+  }
+]
