@@ -537,7 +537,7 @@
     "/slot/": {
       "post": {
         "tags": [
-          "Users"
+          "Slots"
         ],
         "description": "",
         "parameters": [
@@ -584,7 +584,7 @@
       },
       "get": {
         "tags": [
-          "Users"
+          "Slots"
         ],
         "description": "",
         "parameters": [
@@ -612,7 +612,7 @@
     "/slot/{id}": {
       "patch": {
         "tags": [
-          "Users"
+          "Slots"
         ],
         "description": "",
         "parameters": [
@@ -662,7 +662,7 @@
       },
       "delete": {
         "tags": [
-          "Users"
+          "Slots"
         ],
         "description": "",
         "parameters": [
@@ -696,7 +696,7 @@
     "/slot/assign": {
       "post": {
         "tags": [
-          "Users"
+          "Slots"
         ],
         "description": "",
         "parameters": [
@@ -730,6 +730,151 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/request-slot/request/{slotId}": {
+      "post": {
+        "tags": [
+          "Slots-Requests"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "slotId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/request-slot/requests": {
+      "get": {
+        "tags": [
+          "Slots-Requests"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/request-slot/requests/{requestId}/accept": {
+      "patch": {
+        "tags": [
+          "Slots-Requests"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/request-slot/requests/{requestId}/reject": {
+      "patch": {
+        "tags": [
+          "Slots-Requests"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [

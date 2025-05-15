@@ -4,7 +4,6 @@ import { checkAdmin, checkLoggedIn } from '../middlewares/auth.middleware';
 import { CreateSlotDto, UpdateSlotDto } from '../dtos/slot.dto';
 import { validationMiddleware } from '../middlewares/validator.middleware';
 
-
 const slotRouter = express.Router();
 
 slotRouter.use(checkLoggedIn)

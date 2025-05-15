@@ -1,5 +1,5 @@
 {
-  "name": "NodeJS-Typescript-Template",
+  "name": "NodeJS-Typescript-PMS",
   "version": "1.0.0",
   "description": "NodeJS(Typescript) template for bootstrapping your app faster",
   "main": "app.ts",

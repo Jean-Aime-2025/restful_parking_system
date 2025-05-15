@@ -2,6 +2,7 @@ import { Router } from "express";
 import authRouter from "./auth.route";
 import userRouter from "./user.route";
 import slotRouter from "./slot.route";
+import slotRequestsRouter from "./slot-requests";
 
 const router = Router()
 
@@ -23,7 +24,15 @@ router.use("/user", userRouter
 )
 router.use("/slot", slotRouter
     /*
-        #swagger.tags = ['Users']
+        #swagger.tags = ['Slots']
+        #swagger.security = [{
+                "bearerAuth": []
+        }] 
+    */
+)
+router.use("/request-slot", slotRequestsRouter
+    /*
+        #swagger.tags = ['Slots-Requests']
         #swagger.security = [{
                 "bearerAuth": []
         }] 
