@@ -37,9 +37,7 @@ export const getSlots = (slotId?: string) => {
 };
 
 export const deleteSlot = (slotId: string) => {
-  return api.delete('/slot', {
-    params: { slotId },
-  });
+  return api.delete(`/slot/${slotId}`);
 };
 
 export const getUserProfile = () => api.get('/user/me');
