@@ -8,36 +8,27 @@ import {
 import { DataTable } from '@/components/common/data-table';
 import { useState } from 'react';
 import SlotFormDialog from '@/components/common/slot-form-dialog';
-
-const slotsData: SlotDto[] = [
-  {
-    id: 1,
-    slotCode: 'A001',
-    status: 'available',
-    description: 'Main Entrance',
-  },
-  { id: 2, slotCode: 'A002', status: 'occupied', description: 'VIP Zone' },
-  { id: 3, slotCode: 'A003', status: 'occupied', description: 'East Wing' },
-  { id: 4, slotCode: 'A004', status: 'available', description: 'West Corner' },
-  {
-    id: 5,
-    slotCode: 'A005',
-    status: 'available',
-    description: 'Underground 1',
-  },
-  { id: 6, slotCode: 'A006', status: 'occupied', description: 'Underground 2' },
-  { id: 7, slotCode: 'A007', status: 'available', description: 'Near Lobby' },
-  { id: 8, slotCode: 'A008', status: 'available', description: 'Back Lot' },
-  { id: 9, slotCode: 'A009', status: 'occupied', description: 'Loading Zone' },
-  { id: 10, slotCode: 'A010', status: 'available', description: 'Exit Point' },
-];
+import { useGetSlots } from '@/hooks/useSlot';
 
 export default function SlotPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const { data: slotsApiData, isLoading, isError } = useGetSlots();
+
+  const slotsData: SlotDto[] = Array.isArray(slotsApiData)
+    ? slotsApiData.map((slot) => ({
+        id: slot.id,
+        slotCode: slot.code,
+        status: slot.occupied ? 'occupied' : 'available',
+        description: slot.description || '—',
+      }))
+    : [];
+
   const handleAddSlot = () => {
-    setDialogOpen(true); 
+    setDialogOpen(true);
   };
+
+  if (isError) return <div>Error loading slots</div>;
 
   return (
     <div className="p-6">
@@ -45,11 +36,11 @@ export default function SlotPage() {
         data={slotsData}
         columns={AdminSlotsColumns}
         searchEnabled
-        isLoading={false}
+        isLoading={isLoading}
         addButtonIcon={<Plus className="w-5 h-5 text-white" />}
         addButtonTitle="Add Slot"
         onAdd={handleAddSlot}
-        message="No slots found"
+        message={slotsData.length === 0 && !isLoading ? "No Slots found" : undefined}
       />
       <SlotFormDialog open={dialogOpen} setOpen={setDialogOpen} />
     </div>

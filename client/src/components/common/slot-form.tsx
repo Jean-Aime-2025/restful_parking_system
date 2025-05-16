@@ -53,30 +53,30 @@ const SlotForm = ({ setOpen }: SlotFormProps) => {
   const { mutate: createSlotMutation, isPending } = useCreateSlot();
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!/^[A-Z][0-9]{3}$/.test(formData.slotCode)) {
-    setErrors({ ...errors, slotCode: 'Invalid slot code format (e.g., A999)' });
-    return;
-  }
-
-  const newSlot = {
-    code: formData.slotCode,
-    occupied: formData.status === 'occupied',
-    description: formData.note,
-  };
-
-  createSlotMutation(newSlot, {
-    onSuccess: () => {
-      setFormData({
-        status: '',
-        note: '',
-        slotCode: '',
-      });
-      setOpen(false);
+    if (!/^[A-Z][0-9]{3}$/.test(formData.slotCode)) {
+      setErrors({ ...errors, slotCode: 'Invalid slot code format (e.g., A999)' });
+      return;
     }
-  });
-};
+
+    const newSlot = {
+      code: formData.slotCode,
+      occupied: formData.status === 'occupied',
+      description: formData.note,
+    };
+
+    createSlotMutation(newSlot, {
+      onSuccess: () => {
+        setFormData({
+          status: '',
+          note: '',
+          slotCode: '',
+        });
+        setOpen(false);
+      }
+    });
+  };
 
 
   return (

@@ -4,10 +4,10 @@ import { NotebookPen, Trash, UserPlus } from 'lucide-react';
 import { Button } from '../ui/button';
 
 export type SlotDto = {
-  id: number;
+  id: string;                
   slotCode: string;
   status: 'available' | 'occupied';
-  description?: string; 
+  description?: string;
 };
 
 export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
