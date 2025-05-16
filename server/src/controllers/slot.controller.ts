@@ -81,41 +81,6 @@ const deleteSlot = async (req: Request, res: Response) => {
   }
 };
 
-// Assign Slot to User
-const assignSlot = async (req: Request, res: Response) => {
-  const { slotId, userId } = req.body;
-
-  if (!slotId || !userId) {
-    return res.status(400).json({ error: 'slotId and userId are required' });
-  }
-
-  try {
-    const updatedSlot = await prisma.slot.update({
-      where: { id: slotId }, // 🔄 No parseInt
-      data: {
-        user: { connect: { id: userId } },
-        occupied: true,
-      },
-    });
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        assignedSlotId: slotId, // 🔄 No parseInt
-      },
-    });
-
-    return res.json({
-      message: 'Slot assigned to user successfully',
-      slot: updatedSlot,
-    });
-  } catch (error: any) {
-    return res
-      .status(500)
-      .json({ error: 'Failed to assign slot', details: error.message });
-  }
-};
-
 // Get All Slots
 const getAllSlots = async (_req: Request, res: Response) => {
   try {
@@ -182,7 +147,6 @@ const slotController = {
   createSlot,
   updateSlot,
   deleteSlot,
-  assignSlot,
   getAllSlots,
   deassignSlot
 };

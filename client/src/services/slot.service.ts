@@ -13,21 +13,12 @@ export interface UpdateSlot {
   description?: string;
 }
 
-export interface AssignSlot {
-  slotId: string;
-  userId: string;
-}
-
 export const createSlot = (data: CreateSlot) => {
   return api.post('/slot', data);
 };
 
 export const updateSlot = (data: UpdateSlot) => {
   return api.patch(`/slot/${data.id}`, data);
-};
-
-export const assignSlot = (data: AssignSlot) => {
-  return api.post('/slot/assign', data);
 };
 
 export const getSlots = (slotId?: string) => {
@@ -39,5 +30,3 @@ export const getSlots = (slotId?: string) => {
 export const deleteSlot = (slotId: string) => {
   return api.delete(`/slot/${slotId}`);
 };
-
-export const getUserProfile = () => api.get('/user/me');

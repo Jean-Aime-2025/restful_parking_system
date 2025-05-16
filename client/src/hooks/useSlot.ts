@@ -1,23 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  assignSlot,
   createSlot,
   deleteSlot,
   getSlots,
-  getUserProfile,
   updateSlot,
   type CreateSlot,
   type UpdateSlot,
-  type AssignSlot,
 } from '@/services/slot.service';
 import { toast } from 'sonner';
-
-export const useUserProfile = () =>
-  useQuery({
-    queryKey: ['user-profile'],
-    queryFn: getUserProfile,
-  });
 
 export const useGetSlots = (slotId?: string) =>
   useQuery({
@@ -54,22 +45,6 @@ export const useUpdateSlot = () => {
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to update slot');
-    },
-  });
-};
-
-export const useAssignSlot = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data: AssignSlot) => assignSlot(data),
-    onSuccess: () => {
-      toast.success('Slot assigned successfully');
-      queryClient.invalidateQueries({ queryKey: ['slots'] });
-      queryClient.invalidateQueries({ queryKey: ['user-profile'] });
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Failed to assign slot');
     },
   });
 };

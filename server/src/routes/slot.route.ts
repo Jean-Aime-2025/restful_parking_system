@@ -11,7 +11,6 @@ slotRouter.use(checkAdmin)
 slotRouter.post('/', validationMiddleware(CreateSlotDto),slotController.createSlot);
 slotRouter.patch('/:id',validationMiddleware(UpdateSlotDto), slotController.updateSlot);
 slotRouter.delete('/:id', slotController.deleteSlot);
-slotRouter.post('/assign', slotController.assignSlot);
 slotRouter.post('/deassign', slotController.deassignSlot);
 slotRouter.get('/', slotController.getAllSlots);
 
