@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { redirectBasedOnRole } from '@/utils/auth';
 import api from '@/lib/api';
 import { setCookie } from '@/utils/cookie';
+import { useAuthContext } from '@/context/AuthContext';
+
 
 export const useAuth = () => {
   const navigate = useNavigate();
+  const { setAuthenticated } = useAuthContext();
 
   const loginMutation = useMutation({
     mutationFn: async (data: { email: string; password: string }) => {
@@ -16,9 +20,9 @@ export const useAuth = () => {
     onSuccess: (data) => {
       toast.success('Login successful!');
       setCookie('auth_token', data.data.token, 3);
+      setAuthenticated(true); 
       redirectBasedOnRole(navigate);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Login failed');
     },
@@ -27,15 +31,14 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationFn: async (data: { names: string; email: string; telephone: string; password: string }) => {
       const response = await api.post('/user/create', data);
-      console.log(response)
       return response.data;
     },
     onSuccess: (data) => {
       toast.success('Registered successfully! Logging in...');
       setCookie('auth_token', data.data.token, 3);
+      setAuthenticated(true); 
       redirectBasedOnRole(navigate);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Registration failed');
     },

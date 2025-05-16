@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   assignSlot,
@@ -36,7 +37,6 @@ export const useCreateSlot = () => {
       toast.success('Slot created successfully');
       queryClient.invalidateQueries({ queryKey: ['slots'] });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to create slot');
     },
@@ -52,7 +52,6 @@ export const useUpdateSlot = () => {
       toast.success('Slot updated successfully');
       queryClient.invalidateQueries({ queryKey: ['slots'] });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to update slot');
     },
@@ -69,7 +68,6 @@ export const useAssignSlot = () => {
       queryClient.invalidateQueries({ queryKey: ['slots'] });
       queryClient.invalidateQueries({ queryKey: ['user-profile'] });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to assign slot');
     },
@@ -85,7 +83,6 @@ export const useDeleteSlot = () => {
       toast.success('Slot deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['slots'] });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to delete slot');
     },

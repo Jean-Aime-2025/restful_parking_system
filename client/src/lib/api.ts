@@ -8,8 +8,6 @@ const api = axios.create({
   },
 });
 
-
-// what is the use of this???????
 api.interceptors.request.use((config) => {
   const token = getCookie('auth_token'); 
   if (token) {
