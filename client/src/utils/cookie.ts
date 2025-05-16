@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import type { NavigateFunction } from 'react-router-dom';
 
 export const setCookie = (name: string, value: string, hours: number) => {
   Cookies.set(name, value, { expires: hours / 24, path: '/' }); 
@@ -12,7 +13,7 @@ export const deleteCookie = (name: string) => {
   Cookies.remove(name, { path: '/' });
 };
 
-export const logout = () => {
+export const logout = (navigate: NavigateFunction) => {
   deleteCookie('auth_token');
-  window.location.href = '/login';
+  navigate('/login'); 
 };

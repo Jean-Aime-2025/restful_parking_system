@@ -9,7 +9,7 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
-    mutationFn: async (data: { email: string; a: string }) => {
+    mutationFn: async (data: { email: string; password: string }) => {
       const response = await api.post('/auth/login', data);
       return response.data;
     },

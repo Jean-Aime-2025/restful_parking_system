@@ -22,7 +22,7 @@ const SlotFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
             Create New Slot
           </DialogTitle>
         </DialogHeader>
-        <SlotForm />
+        <SlotForm setOpen={setOpen}/>
         <DialogClose asChild>
           <Button variant="outline" className="w-full">
             Cancel

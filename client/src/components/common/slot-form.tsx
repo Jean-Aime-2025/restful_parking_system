@@ -8,7 +8,11 @@ import { ClipLoader } from 'react-spinners';
 import { Textarea } from '../ui/textarea';
 import { useCreateSlot } from '@/hooks/useSlot';
 
-const SlotForm = () => {
+type SlotFormProps = {
+  setOpen: (open: boolean) => void;
+};
+
+const SlotForm = ({ setOpen }: SlotFormProps) => {
   const [formData, setFormData] = useState({
     status: '',
     note: '',
@@ -69,6 +73,7 @@ const SlotForm = () => {
         note: '',
         slotCode: '',
       });
+      setOpen(false);
     }
   });
 };

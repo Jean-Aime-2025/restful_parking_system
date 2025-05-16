@@ -12,21 +12,18 @@ import {
 } from "@/services/slot.service";
 import { toast } from "sonner";
 
-// 🔹 Get current user profile
 export const useUserProfile = () =>
   useQuery({
     queryKey: ["user-profile"],
     queryFn: getUserProfile,
   });
 
-// 🔹 Get slots (optional: by slotId)
 export const useGetSlots = (slotId?: string) =>
   useQuery({
     queryKey: ["slots", slotId],
     queryFn: () => getSlots(slotId),
   });
 
-// 🔹 Create slot
 export const useCreateSlot = () => {
   const queryClient = useQueryClient();
 
@@ -36,13 +33,13 @@ export const useCreateSlot = () => {
       toast.success("Slot created successfully");
       queryClient.invalidateQueries({ queryKey: ["slots"] });
     },
-    onError: () => {
-      toast.error("Failed to create slot");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error:any) => {
+      toast.error(error?.response?.data?.message || 'Failed to create slot');
     },
   });
 };
 
-// 🔹 Update slot
 export const useUpdateSlot = () => {
   const queryClient = useQueryClient();
 
@@ -58,7 +55,6 @@ export const useUpdateSlot = () => {
   });
 };
 
-// 🔹 Assign slot
 export const useAssignSlot = () => {
   const queryClient = useQueryClient();
 
@@ -75,7 +71,6 @@ export const useAssignSlot = () => {
   });
 };
 
-// 🔹 Delete slot
 export const useDeleteSlot = () => {
   const queryClient = useQueryClient();
 
