@@ -9,7 +9,7 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
-    mutationFn: async (data: { email: string; password: string }) => {
+    mutationFn: async (data: { email: string; a: string }) => {
       const response = await api.post('/auth/login', data);
       return response.data;
     },
@@ -25,8 +25,9 @@ export const useAuth = () => {
   });
 
   const registerMutation = useMutation({
-    mutationFn: async (data: { name: string; email: string; phone: string; password: string }) => {
-      const response = await api.post('/auth/register', data);
+    mutationFn: async (data: { names: string; email: string; telephone: string; password: string }) => {
+      const response = await api.post('/user/create', data);
+      console.log(response)
       return response.data;
     },
     onSuccess: (data) => {

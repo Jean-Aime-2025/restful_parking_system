@@ -26,9 +26,9 @@ export function AuthForm({ className, type = 'login', ...props }: LoginFormProps
 
     if (isRegister) {
       await register({
-        name: data.name as string,
+        names: data.name as string,
         email: data.email as string,
-        phone: data.phone as string,
+        telephone: data.phone as string,
         password: data.password as string,
       });
     } else {

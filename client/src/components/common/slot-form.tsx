@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ClipLoader } from 'react-spinners';
 import { Textarea } from '../ui/textarea';
+import { useCreateSlot } from '@/hooks/useSlot';
 
 const SlotForm = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,6 @@ const SlotForm = () => {
   const [errors, setErrors] = useState({
     slotCode: ''
   });
-  const [loading, setLoading] = useState(false); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -46,27 +46,33 @@ const SlotForm = () => {
     }
   };
 
+  const { mutate: createSlotMutation, isPending } = useCreateSlot();
+
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
 
-    if (!/^[A-Z][0-9]{3}$/.test(formData.slotCode)) {
-      setErrors({ ...errors, slotCode: 'Invalid slot code format (e.g., A999)' });
-      setLoading(false);
-      return;
-    }
+  if (!/^[A-Z][0-9]{3}$/.test(formData.slotCode)) {
+    setErrors({ ...errors, slotCode: 'Invalid slot code format (e.g., A999)' });
+    return;
+  }
 
-    console.log('Form submitted:', formData);
-    
-    setTimeout(() => {
-      setLoading(false);
+  const newSlot = {
+    code: formData.slotCode,
+    occupied: formData.status === 'occupied',
+    description: formData.note,
+  };
+
+  createSlotMutation(newSlot, {
+    onSuccess: () => {
       setFormData({
         status: '',
         note: '',
-        slotCode: ''
+        slotCode: '',
       });
-    }, 1500);
-  };
+    }
+  });
+};
+
 
   return (
     <form
@@ -122,10 +128,10 @@ const SlotForm = () => {
 
       <Button
         type="submit"
-        disabled={loading}
-        className={loading ? 'opacity-70' : ''}
+        disabled={isPending}
+        className={isPending ? 'opacity-70' : ''}
       >
-        {loading ? (
+        {isPending ? (
           <div className="flex items-center justify-center gap-2">
             <ClipLoader size={20} color="#fff" />
             <span>Submitting...</span>
@@ -134,6 +140,7 @@ const SlotForm = () => {
           'Create Slot'
         )}
       </Button>
+
     </form>
   );
 };
