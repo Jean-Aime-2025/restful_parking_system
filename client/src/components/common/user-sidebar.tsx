@@ -1,4 +1,3 @@
-'use client';
 
 import * as React from 'react';
 import { BookOpenIcon, ListIcon, User } from 'lucide-react';

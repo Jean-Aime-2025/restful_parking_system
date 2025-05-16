@@ -1,4 +1,3 @@
-'use client';
 
 import { UserSlotsColumns, type UserSlotDto } from '@/components/columns/user-slots-columns';
 import { DataTable } from '@/components/common/data-table';

@@ -1,4 +1,3 @@
-'use client';
 
 import { RequestsColumns, type RequestDto } from '@/components/columns/request-columns';
 import { DataTable } from '@/components/common/data-table';

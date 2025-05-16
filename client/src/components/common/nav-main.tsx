@@ -1,4 +1,3 @@
-'use client';
 
 import { PlusCircleIcon, MoveRight, type LucideIcon, Eye } from 'lucide-react';
 import { NavLink } from 'react-router-dom';

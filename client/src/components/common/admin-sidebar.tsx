@@ -1,4 +1,3 @@
-'use client';
 
 import * as React from 'react';
 import { ArrowUpCircleIcon, LayoutDashboardIcon, ListIcon, MailIcon } from 'lucide-react';

@@ -1,4 +1,3 @@
-'use client';
 
 import { LogOutIcon, MoreVerticalIcon, UserCircleIcon } from 'lucide-react';
 
