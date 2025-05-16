@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
-import { NotebookPen, Trash, UserPlus } from 'lucide-react';
+import { NotebookPen, Trash } from 'lucide-react';
 import { Button } from '../ui/button';
 
 export type SlotDto = {
@@ -57,24 +57,5 @@ export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
         </div>
       );
     },
-  },
-  {
-    id: 'assign',
-    header: () => <div className="text-center">Assign</div>,
-    cell: ({ row }) => {
-      const isAvailable = row.original.status === 'available';
-      return isAvailable ? (
-        <div className="flex justify-center">
-          <Button
-            className="!px-[10px] !py-2 rounded-full mx-auto"
-            title="Assign"
-          >
-            <UserPlus size={19} />
-          </Button>
-        </div>
-      ) : (
-        <div className="text-muted-foreground text-center">—</div>
-      );
-    },
-  },
+  }
 ];
