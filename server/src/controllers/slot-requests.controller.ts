@@ -31,8 +31,6 @@ const requestSlotHandler:any = async (req: AuthRequest, res: Response) => {
 };
 
 const getAllRequestsHandler:any = async (req: AuthRequest, res: Response) => {
-  const adminUser = await prisma.user.findUnique({ where: { id: req.user.id } });
-  if (adminUser?.role !== "ADMIN") return res.status(403).json({ message: "Forbidden" });
 
   const requests = await prisma.parkingRequest.findMany({
     include: { user: true },
@@ -43,8 +41,6 @@ const getAllRequestsHandler:any = async (req: AuthRequest, res: Response) => {
 };
 
 const acceptRequestHandler: any = async (req: AuthRequest, res: Response) => {
-  const adminUser = await prisma.user.findUnique({ where: { id: req.user.id } });
-  if (adminUser?.role !== "ADMIN") return res.status(403).json({ message: "Forbidden" });
 
   const requestId = req.params.requestId; // changed from Number()
 
@@ -76,8 +72,6 @@ const acceptRequestHandler: any = async (req: AuthRequest, res: Response) => {
 };
 
 const rejectRequestHandler: any = async (req: AuthRequest, res: Response) => {
-  const adminUser = await prisma.user.findUnique({ where: { id: req.user.id } });
-  if (adminUser?.role !== "ADMIN") return res.status(403).json({ message: "Forbidden" });
 
   const requestId = req.params.requestId; // changed from Number()
 

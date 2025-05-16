@@ -3,11 +3,15 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
 // Create Slot
 const createSlot = async (req: Request, res: Response) => {
   const { code, occupied = false, description } = req.body;
 
-  if (!code) return res.status(400).json({ error: 'Slot code is required' });
+  if (!code) {
+    return res.status(400).json({ error: 'Slot code is required' });
+  }
 
   try {
     const slot = await prisma.slot.create({
@@ -19,9 +23,23 @@ const createSlot = async (req: Request, res: Response) => {
     });
     return res.status(201).json(slot);
   } catch (error: any) {
-    return res
-      .status(500)
-      .json({ error: 'Failed to create slot', details: error.message });
+    // Check if it's a Prisma known request error
+    if (error instanceof PrismaClientKnownRequestError) {
+      // Handle unique constraint error
+      if (error.code === 'P2002') {
+        return res.status(409).json({
+          error: 'Conflict',
+          message: `A slot with code '${code}' already exists.`,
+        });
+      }
+    }
+
+    // Generic error fallback
+    return res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to create slot due to an unexpected error.',
+      details: error.message,
+    });
   }
 };
 
@@ -110,12 +128,63 @@ const getAllSlots = async (_req: Request, res: Response) => {
   }
 };
 
+// Deassign Slot from User
+const deassignSlot = async (req: Request, res: Response) => {
+  const { slotId } = req.body;
+
+  if (!slotId) {
+    return res.status(400).json({ error: 'slotId is required' });
+  }
+
+  try {
+    // Find the slot to get associated userId
+    const slot = await prisma.slot.findUnique({
+      where: { id: slotId },
+      include: { user: true },
+    });
+
+    if (!slot) {
+      return res.status(404).json({ error: 'Slot not found' });
+    }
+
+    // Update the slot: disconnect user, mark as unoccupied
+    const updatedSlot = await prisma.slot.update({
+      where: { id: slotId },
+      data: {
+        user: { disconnect: true },
+        occupied: false,
+      },
+    });
+
+    // Optional: clear assignedSlotId on the user side
+    if (slot.user) {
+      await prisma.user.update({
+        where: { id: slot.user.id },
+        data: {
+          assignedSlotId: null,
+        },
+      });
+    }
+
+    return res.json({
+      message: 'Slot deassigned from user successfully',
+      slot: updatedSlot,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: 'Failed to deassign slot',
+      details: error.message,
+    });
+  }
+};
+
 const slotController = {
   createSlot,
   updateSlot,
   deleteSlot,
   assignSlot,
   getAllSlots,
+  deassignSlot
 };
 
 export default slotController;
