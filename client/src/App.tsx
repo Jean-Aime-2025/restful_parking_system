@@ -8,6 +8,7 @@ import UserSlots from './pages/user/Slots';
 import AdminSlots from './pages/admin/Slots';
 import { AdminLayout } from './components/layout/admin-layout';
 import UserLayout from './components/layout/user-layout';
+import { ProtectedRoute } from './components/security/ProtectedRoute';
 
 function App() {
   return (
@@ -18,41 +19,51 @@ function App() {
       <Route
         path="/admin"
         element={
-          <AdminLayout>
-            <AdminDashboard />
-          </AdminLayout>
+          <ProtectedRoute>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/admin/slots"
         element={
-          <AdminLayout>
-            <AdminSlots />
-          </AdminLayout>
+          <ProtectedRoute>
+            <AdminLayout>
+              <AdminSlots />
+            </AdminLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/admin/requests"
         element={
-          <AdminLayout>
-            <Requests />
-          </AdminLayout>
+          <ProtectedRoute>
+            <AdminLayout>
+              <Requests />
+            </AdminLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/user"
         element={
-          <UserLayout>
-            <UserDashboard />
-          </UserLayout>
+          <ProtectedRoute>
+            <UserLayout>
+              <UserDashboard />
+            </UserLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/user/slots"
         element={
-          <UserLayout>
-            <UserSlots />
-          </UserLayout>
+          <ProtectedRoute>
+            <UserLayout>
+              <UserSlots />
+            </UserLayout>
+          </ProtectedRoute>
         }
       />
     </Routes>

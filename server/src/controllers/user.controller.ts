@@ -24,7 +24,7 @@ const createUser = async (req: Request, res: Response) => {
       },
     });
     const token = jwt.sign(
-      { id: user.id },
+      { id: user.id,role:user.role },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: "3d" }
     );

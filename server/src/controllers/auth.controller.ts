@@ -19,7 +19,7 @@ const login = async (req: Request, res: Response) => {
     const isMatch = compareSync(password, user.password);
     if (!isMatch) return ServerResponse.error(res, "Invalid email or password");
     const token = jwt.sign(
-      { id: user.id },
+      { id: user.id,role:user.role },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: "3d" }
     );

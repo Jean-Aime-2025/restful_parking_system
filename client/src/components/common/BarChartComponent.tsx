@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import { TrendingUp } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 import {
   Card,
@@ -10,24 +10,24 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { type ChartConfig } from "@/components/ui/chart";
+} from '@/components/ui/chart';
+import { type ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
-  { level: "L1", total: 42 },
-  { level: "L2", total: 58 },
-  { level: "L3", total: 35 },
+  { level: 'L1', total: 42 },
+  { level: 'L2', total: 58 },
+  { level: 'L3', total: 35 },
 ];
 
 const chartConfig = {
   total: {
-    label: "Total Slots",
-    color: "hsl(var(--chart-1))",
+    label: 'Total Slots',
+    color: 'hsl(var(--chart-1))',
   },
 } satisfies ChartConfig;
 
@@ -40,11 +40,7 @@ export function BarChartComponent() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{ top: 20 }}
-          >
+          <BarChart accessibilityLayer data={chartData} margin={{ top: 20 }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="level"
@@ -56,7 +52,12 @@ export function BarChartComponent() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="total" fill="var(--color-total)" radius={8} barSize={180}>
+            <Bar
+              dataKey="total"
+              fill="var(--color-total)"
+              radius={8}
+              barSize={180}
+            >
               <LabelList
                 position="top"
                 offset={12}

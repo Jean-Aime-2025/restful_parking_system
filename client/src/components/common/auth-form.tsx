@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { ClipLoader } from "react-spinners";
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react'; 
+import { useAuth } from '@/hooks/useAuth';
 
 interface LoginFormProps extends React.ComponentProps<'div'> {
   type: 'login' | 'register';
@@ -14,22 +15,28 @@ interface LoginFormProps extends React.ComponentProps<'div'> {
 export function AuthForm({ className, type = 'login', ...props }: LoginFormProps) {
   const isRegister = type === 'register';
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const { login, register, loginLoading, registerLoading } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    
-    console.log('Form submitted with data:', data);
-    setLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      console.log(`${type === 'login' ? 'Login' : 'Registration'} successful for:`, data.email);
-    }, 1500);
+
+    if (isRegister) {
+      await register({
+        name: data.name as string,
+        email: data.email as string,
+        phone: data.phone as string,
+        password: data.password as string,
+      });
+    } else {
+      await login({
+        email: data.email as string,
+        password: data.password as string,
+      });
+    }
   };
 
   return (
@@ -57,20 +64,6 @@ export function AuthForm({ className, type = 'login', ...props }: LoginFormProps
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input id="phone" name="phone" type="tel" placeholder="+250..." required />
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="gender">Gender</Label>
-                    <select
-                      id="gender"
-                      name="gender"
-                      className="rounded-md border px-3 py-2 text-sm"
-                      required
-                    >
-                      <option value="">Select gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
                 </>
               )}
 
@@ -87,6 +80,7 @@ export function AuthForm({ className, type = 'login', ...props }: LoginFormProps
                   type={showPassword ? 'text' : 'password'}
                   required
                   className="pr-10"
+                  placeholder='********'
                 />
                 <button
                   type="button"
@@ -109,8 +103,12 @@ export function AuthForm({ className, type = 'login', ...props }: LoginFormProps
                 </div>
               )}
 
-              <Button type="submit" className={`w-full cursor-pointer ${loading ? "opacity-70" : ""}`} disabled={loading}>
-                {loading ? (
+              <Button
+                type="submit"
+                className={`w-full cursor-pointer ${loginLoading || registerLoading ? "opacity-70" : ""}`}
+                disabled={loginLoading || registerLoading}
+              >
+                {(loginLoading || registerLoading) ? (
                   <div className="flex items-center justify-center gap-x-2 w-full">
                     <ClipLoader size={20} color="#fff" />
                     <span>Please wait...</span>
@@ -124,14 +122,14 @@ export function AuthForm({ className, type = 'login', ...props }: LoginFormProps
                 {isRegister ? (
                   <>
                     Already have an account?{' '}
-                    <a href="#" className="underline underline-offset-4">
+                    <a href="/login" className="underline underline-offset-4">
                       Login
                     </a>
                   </>
                 ) : (
                   <>
                     Don&apos;t have an account?{' '}
-                    <a href="#" className="underline underline-offset-4">
+                    <a href="/register" className="underline underline-offset-4">
                       Sign up
                     </a>
                   </>
