@@ -56,7 +56,12 @@ const getAllRequestsHandler:any = async (req: AuthRequest, res: Response) => {
             id: true,
             names: true,
             email: true,
-            assignedSlotId: true,
+            assignedSlot: {
+              select: {
+                code: true,
+                description: true,
+              },
+            },
           },
         },
       },
@@ -174,7 +179,12 @@ const getPendingRequestsWithSlotHandler:any = async (req: AuthRequest, res: Resp
             id: true,
             names: true,
             email: true,
-            assignedSlotId: true,
+            assignedSlot: {
+              select: {
+                code: true,
+                description: true,
+              },
+            },
           },
         },
       },

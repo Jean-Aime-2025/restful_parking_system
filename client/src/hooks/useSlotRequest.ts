@@ -1,24 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  requestSlot,
   getAllSlotRequests,
   acceptRequest,
   rejectRequest,
 } from '@/services/slotRequest.service'
 import { toast } from 'sonner';
-
-export const useRequestSlot = () => {
-  return useMutation({
-    mutationFn: (slotId: string) => requestSlot(slotId),
-    onSuccess: (data) => {
-      toast.success(data.data.message || 'Slot requested successfully');
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Failed to request slot');
-    }
-  });
-};
 
 export const useGetAllRequests = () => {
   return useQuery({

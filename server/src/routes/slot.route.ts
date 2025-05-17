@@ -6,6 +6,8 @@ import { validationMiddleware } from '../middlewares/validator.middleware';
 
 const slotRouter = express.Router();
 
+slotRouter.get('/available', slotController.getAvailableSlots);
+
 slotRouter.use(checkLoggedIn)
 slotRouter.use(checkAdmin)
 slotRouter.post('/', validationMiddleware(CreateSlotDto),slotController.createSlot);

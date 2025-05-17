@@ -21,10 +21,8 @@ export const updateSlot = (data: UpdateSlot) => {
   return api.patch(`/slot/${data.id}`, data);
 };
 
-export const getSlots = (slotId?: string) => {
-  return api.get('/slot', {
-    params: slotId ? { slotId } : undefined,
-  });
+export const getAvailableSlots = () => {
+  return api.get('/slot/available');
 };
 
 export const deleteSlot = (slotId: string) => {
@@ -34,3 +32,4 @@ export const deleteSlot = (slotId: string) => {
 export const deassignSlot = (slotId: string) => {
   return api.post('/slot/deassign', { slotId });
 };
+

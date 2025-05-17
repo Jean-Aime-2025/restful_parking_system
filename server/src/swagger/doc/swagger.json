@@ -534,6 +534,27 @@
         ]
       }
     },
+    "/slot/available": {
+      "get": {
+        "tags": [
+          "Slots"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/slot/": {
       "post": {
         "tags": [

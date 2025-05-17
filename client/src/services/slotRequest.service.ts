@@ -5,7 +5,7 @@ export const requestSlot = (slotId: string) => {
 };
 
 export const getAllSlotRequests = () => {
-  return api.get(`/request-slot/requests`);
+  return api.get(`/request-slot/requests/pending-with-slot`);
 };
 
 export const acceptRequest = (requestId: string) => {

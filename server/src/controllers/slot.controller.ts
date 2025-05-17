@@ -94,7 +94,7 @@ const getAllSlots = async (_req: Request, res: Response) => {
 };
 
 // Deassign Slot from User
-const deassignSlot:any = async (req: Request, res: Response) => {
+const deassignSlot = async (req: Request, res: Response) => {
   const { slotId } = req.body;
 
   if (!slotId) {
@@ -169,12 +169,40 @@ const deassignSlot:any = async (req: Request, res: Response) => {
   }
 };
 
+// get available slots
+const getAvailableSlots:any = async (_req: Request, res: Response) => {
+  try {
+    const slots = await prisma.slot.findMany({
+      where: {
+        occupied: false,
+        user: {
+          parkingRequests: {
+            some: {
+              status: {
+                in: ['DENIED', 'DEASSIGNED'],
+              },
+            },
+          },
+        },
+      }
+    });
+
+    return res.json(slots);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: 'Failed to fetch available slots',
+      details: error.message,
+    });
+  }
+};
+
 const slotController = {
   createSlot,
   updateSlot,
   deleteSlot,
   getAllSlots,
-  deassignSlot
+  deassignSlot,
+  getAvailableSlots
 };
 
 export default slotController;

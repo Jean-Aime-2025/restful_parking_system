@@ -1,24 +1,46 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { RequestsColumns, type RequestDto } from '@/components/columns/request-columns';
 import { DataTable } from '@/components/common/data-table';
-
-// Mock requests data
-const requestsData: RequestDto[] = [
-  { id: 1, requesterName: 'Alice Johnson', slotCode: 'A001' },
-  { id: 2, requesterName: 'Bob Smith', slotCode: 'A005' },
-  { id: 3, requesterName: 'Charlie Davis', slotCode: 'A003' },
-  { id: 4, requesterName: 'Diana Prince', slotCode: 'A007' },
-  { id: 5, requesterName: 'Ethan Hunt', slotCode: 'A002' },
-];
+import { useGetAllRequests } from '@/hooks/useSlotRequest';
+import { Loader2 } from 'lucide-react';
 
 const Requests = () => {
+  const { data: requests, isLoading, isError } = useGetAllRequests();
+
+  const tableData: RequestDto[] =
+    requests?.map((req: any) => ({
+      id: req.id,
+      requesterName: req.user?.names ?? 'Unknown',
+      requesterEmail: req.user?.email ?? 'N/A',
+      slotCode: req.user?.assignedSlot?.code ?? 'N/A',
+      slotDescription: req.user?.assignedSlot?.description ?? 'N/A',
+      createdAt: req.createdAt,
+    })) ?? [];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <Loader2 className="animate-spin" size={32} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-500 font-medium">
+        Failed to load requests.
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
       <DataTable<RequestDto>
-        data={requestsData}
+        data={tableData}
         columns={RequestsColumns}
-        searchEnabled={true}
-        message="No requests found"
+        searchEnabled
+        message={requests.length === 0 && !isLoading ? "No requests found" : undefined}
       />
     </div>
   );

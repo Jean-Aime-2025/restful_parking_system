@@ -1,5 +1,4 @@
-
-import { Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import {
   AdminSlotsColumns,
   type SlotDto,
@@ -29,17 +28,26 @@ export default function SlotPage() {
 
   if (isError) return <div>Error loading slots</div>;
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <Loader2 className="animate-spin" size={32} />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <DataTable<SlotDto>
         data={slotsData}
         columns={AdminSlotsColumns}
         searchEnabled
-        isLoading={isLoading}
         addButtonIcon={<Plus className="w-5 h-5 text-white" />}
         addButtonTitle="Add Slot"
         onAdd={handleAddSlot}
-        message={slotsData.length === 0 && !isLoading ? "No Slots found" : undefined}
+        message={
+          slotsData.length === 0 && !isLoading ? 'No Slots found' : undefined
+        }
       />
       <SlotFormDialog open={dialogOpen} setOpen={setDialogOpen} />
     </div>

@@ -1,14 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { type ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { useRequestSlot } from '@/hooks/useSlot';
 
-export type UserSlotDto = {
+export type SlotDto = {
   id: number;
   slotCode: string;
   description?: string;
 };
 
-export const UserSlotsColumns: ColumnDef<UserSlotDto>[] = [
+export const UserSlotsColumns: ColumnDef<SlotDto>[] = [
   {
     accessorKey: 'slotCode',
     header: 'Available Slot',
@@ -24,9 +26,10 @@ export const UserSlotsColumns: ColumnDef<UserSlotDto>[] = [
     header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
       const { id } = row.original;
+      const mutation = useRequestSlot();
 
       const handleRequest = () => {
-        alert(`Requested slot ${row.original.slotCode} (id: ${id})`);
+        mutation.mutate(id.toString());
       };
 
       return (
@@ -36,6 +39,7 @@ export const UserSlotsColumns: ColumnDef<UserSlotDto>[] = [
             className="!px-[10px] !py-2 rounded-full"
             onClick={handleRequest}
             title="Request Slot"
+            disabled={mutation.isPending}
           >
             <Plus size={16} />
           </Button>

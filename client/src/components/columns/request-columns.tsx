@@ -1,12 +1,16 @@
-// components/columns/requests-columns.tsx
+/* eslint-disable react-hooks/rules-of-hooks */
 import { type ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Check, X } from 'lucide-react';
+import { useAcceptRequest, useRejectRequest } from '@/hooks/useSlotRequest';
 
 export type RequestDto = {
-  id: number;
+  id: string;
   requesterName: string;
+  requesterEmail: string;
   slotCode: string;
+  slotDescription: string;
+  createdAt: string;
 };
 
 export const RequestsColumns: ColumnDef<RequestDto>[] = [
@@ -18,36 +22,48 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     ),
   },
   {
+    accessorKey: 'requesterEmail',
+    header: 'Email',
+    cell: ({ row }) => <div>{row.original.requesterEmail}</div>,
+  },
+  {
     accessorKey: 'slotCode',
     header: 'Slot Code',
     cell: ({ row }) => <div>{row.original.slotCode}</div>,
+  },
+  {
+    accessorKey: 'slotDescription',
+    header: 'Slot Description',
+    cell: ({ row }) => <div>{row.original.slotDescription}</div>,
+  },
+  {
+    accessorKey: 'createdAt',
+    header: 'Requested At',
+    cell: ({ row }) => {
+      const date = new Date(row.original.createdAt);
+      return <div>{date.toLocaleString()}</div>;
+    },
   },
   {
     id: 'actions',
     header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
       const { id } = row.original;
-
-      const handleAccept = () => {
-        alert(`Accepted request ${id}`);
-      };
-
-      const handleReject = () => {
-        alert(`Rejected request ${id}`);
-      };
+      const { mutate: accept } = useAcceptRequest();
+      const { mutate: reject } = useRejectRequest();
 
       return (
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={handleAccept}
+            onClick={() => accept(id)}
             title="Accept"
           >
             <Check size={16} />
           </Button>
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={handleReject}
+            onClick={() => reject(id)}
             title="Reject"
           >
             <X size={16} />
