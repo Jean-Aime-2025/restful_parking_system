@@ -1,4 +1,3 @@
-'use client';
 
 import { TrendingUp } from 'lucide-react';
 import { LabelList, Pie, PieChart } from 'recharts';
