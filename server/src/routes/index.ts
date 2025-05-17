@@ -48,7 +48,7 @@ router.use("/admin", adminDashboardRouter
         }] 
     */
 )
-router.use("/user", userDashboardRouter
+router.use("/dashboard", userDashboardRouter
     /*
         #swagger.tags = ['user-dashboard']
         #swagger.security = [{

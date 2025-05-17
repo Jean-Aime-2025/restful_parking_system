@@ -982,7 +982,7 @@
         ]
       }
     },
-    "/user/dashboard": {
+    "/dashboard/user": {
       "get": {
         "tags": [
           "user-dashboard"

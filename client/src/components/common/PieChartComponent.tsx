@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { TrendingUp } from "lucide-react";
-import { LabelList, Pie, PieChart } from "recharts";
+import { TrendingUp } from 'lucide-react';
+import { LabelList, Pie, PieChart } from 'recharts';
 
 import {
   Card,
@@ -10,34 +10,45 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { type ChartConfig } from "@/components/ui/chart";
-
-const chartData = [
-  { status: "Available", count: 75, fill: "#21201d" },
-  { status: "Occupied", count: 60, fill: "var(--color-occupied)" },
-];
+} from '@/components/ui/chart';
+import { type ChartConfig } from '@/components/ui/chart';
+import { useAdminDashboard } from '@/hooks/useDashboard';
 
 const chartConfig = {
   count: {
-    label: "Slot Count",
+    label: 'Slot Count',
   },
   Available: {
-    label: "Available",
-    color: "hsl(var(--chart-1))",
+    label: 'Available',
+    color: 'hsl(var(--chart-1))',
   },
   Occupied: {
-    label: "Occupied",
-    color: "hsl(var(--chart-2))",
+    label: 'Occupied',
+    color: '#4a4843',
   },
 } satisfies ChartConfig;
 
 export function PieChartComponent() {
+  const { data, isLoading } = useAdminDashboard();
+
+  const chartData = [
+    {
+      status: 'Available',
+      count: data?.availableSlots ?? 0,
+      fill: 'var(--color-available)',
+    },
+    {
+      status: 'Occupied',
+      count: data?.occupiedSlots ?? 0,
+      fill: '#4a4843',
+    },
+  ];
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -50,10 +61,8 @@ export function PieChartComponent() {
           className="mx-auto aspect-square [&_.recharts-text]:fill-background"
         >
           <PieChart>
-            <ChartTooltip
-              content={<ChartTooltipContent nameKey="count" hideLabel />}
-            />
-            <Pie data={chartData} dataKey="count">
+            <ChartTooltip content={<ChartTooltipContent nameKey="count" hideLabel />} />
+            <Pie data={chartData} dataKey="count" isAnimationActive={!isLoading}>
               <LabelList
                 dataKey="status"
                 className="fill-background"

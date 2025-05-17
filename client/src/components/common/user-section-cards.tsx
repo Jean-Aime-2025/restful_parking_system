@@ -8,15 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUserDashboard } from "@/hooks/useDashboard";
 
 export function UserSectionCards() {
+  const { data, isLoading, error } = useUserDashboard();
+
+  if (isLoading) return <p>Loading user dashboard...</p>;
+  if (error || !data) return <p>Failed to load user dashboard data.</p>;
+
   return (
-    <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-3 @5xl/main:grid-cols-3 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
+    <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-3">
       <Card className="@container/card">
         <CardHeader className="relative">
           <CardDescription>Your Slot</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            Level 1, Room A
+          <CardTitle className="text-2xl font-semibold tabular-nums">
+            {data.slotInfo ?? "No slot info available"}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -38,8 +44,8 @@ export function UserSectionCards() {
       <Card className="@container/card">
         <CardHeader className="relative">
           <CardDescription>Slot Status</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            Occupied
+          <CardTitle className="text-2xl font-semibold tabular-nums">
+            {data.slotStatus ?? "No slot status available"}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -52,17 +58,15 @@ export function UserSectionCards() {
           <div className="flex gap-2 font-medium">
             Your slot is currently in use <TrendingDownIcon className="size-4" />
           </div>
-          <div className="text-muted-foreground">
-            You can manage it via the slot dashboard
-          </div>
+          <div className="text-muted-foreground">You can manage it via the slot dashboard</div>
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader className="relative">
           <CardDescription>Request Status</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            Approved
+          <CardTitle className="text-2xl font-semibold tabular-nums">
+            {data.requestStatus ?? "No request status available"}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -75,9 +79,7 @@ export function UserSectionCards() {
           <div className="flex gap-2 font-medium">
             Your request was successful <TrendingUpIcon className="size-4" />
           </div>
-          <div className="text-muted-foreground">
-            You can now access your assigned slot
-          </div>
+          <div className="text-muted-foreground">You can now access your assigned slot</div>
         </CardFooter>
       </Card>
     </div>
