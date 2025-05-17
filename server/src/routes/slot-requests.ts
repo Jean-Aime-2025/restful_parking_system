@@ -11,5 +11,6 @@ slotRequestsRouter.use(checkAdmin)
 slotRequestsRouter.get("/requests", slotRequestsController.getAllRequestsHandler);
 slotRequestsRouter.patch("/requests/:requestId/accept", slotRequestsController.acceptRequestHandler);
 slotRequestsRouter.patch("/requests/:requestId/reject", slotRequestsController.rejectRequestHandler);
+slotRequestsRouter.get("/requests/pending-with-slot",slotRequestsController.getPendingRequestsWithSlotHandler)
 
 export default slotRequestsRouter;

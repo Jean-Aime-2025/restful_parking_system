@@ -156,12 +156,47 @@ const getUserRequestHandler:any = async (req: AuthRequest, res: Response) => {
   }
 };
 
+// === Admin: Get all PENDING requests with assignedSlotId !== null ===
+const getPendingRequestsWithSlotHandler:any = async (req: AuthRequest, res: Response) => {
+  try {
+    const requests = await prisma.parkingRequest.findMany({
+      where: {
+        status: 'PENDING',
+        user: {
+          NOT: {
+            assignedSlotId: null,
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            names: true,
+            email: true,
+            assignedSlotId: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return res.json({ requests });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ message: 'Error fetching pending requests with assigned slots', error: error.message });
+  }
+};
+
+
 const slotRequestsController = {
   requestSlotHandler,
   getAllRequestsHandler,
   acceptRequestHandler,
   rejectRequestHandler,
   getUserRequestHandler,
+  getPendingRequestsWithSlotHandler
 };
 
 export default slotRequestsController;

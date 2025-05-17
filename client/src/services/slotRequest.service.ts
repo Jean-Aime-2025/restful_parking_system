@@ -15,7 +15,3 @@ export const acceptRequest = (requestId: string) => {
 export const rejectRequest = (requestId: string) => {
   return api.patch(`/request-slot/requests/${requestId}/reject`);
 };
-
-export const deassignSlot = (payload: { userId: string }) => {
-  return api.post(`/slot/deassign`, payload);
-};

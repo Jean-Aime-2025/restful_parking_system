@@ -30,6 +30,7 @@ enum RequestStatus {
   PENDING
   APPROVED
   DENIED
+  DEASSIGNED
 }
 
 model User {

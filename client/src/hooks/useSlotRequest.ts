@@ -5,8 +5,7 @@ import {
   getAllSlotRequests,
   acceptRequest,
   rejectRequest,
-  deassignSlot
-} from '@/services/slotrequest.service';
+} from '@/services/slotRequest.service'
 import { toast } from 'sonner';
 
 export const useRequestSlot = () => {
@@ -53,18 +52,6 @@ export const useRejectRequest = () => {
     },
     onError: (err: any) => {
       toast.error(err.response?.data?.message || 'Failed to reject request');
-    },
-  });
-};
-
-export const useDeassignSlot = () => {
-  return useMutation({
-    mutationFn: (payload: { userId: string }) => deassignSlot(payload),
-    onSuccess: () => {
-      toast.success('Slot deassigned');
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Failed to deassign slot');
     },
   });
 };

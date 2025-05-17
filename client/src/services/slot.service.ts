@@ -30,3 +30,7 @@ export const getSlots = (slotId?: string) => {
 export const deleteSlot = (slotId: string) => {
   return api.delete(`/slot/${slotId}`);
 };
+
+export const deassignSlot = (slotId: string) => {
+  return api.post('/slot/deassign', { slotId });
+};

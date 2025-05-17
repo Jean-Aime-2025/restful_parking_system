@@ -2,6 +2,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createSlot,
+  deassignSlot,
   deleteSlot,
   getSlots,
   updateSlot,
@@ -60,6 +61,22 @@ export const useDeleteSlot = () => {
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Failed to delete slot');
+    },
+  });
+};
+
+
+export const useDeassignSlot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (slotId: string) => deassignSlot(slotId),
+    onSuccess: () => {
+      toast.success('Slot deassigned successfully');
+      queryClient.invalidateQueries({ queryKey: ['slots'] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error || 'Failed to deassign slot');
     },
   });
 };

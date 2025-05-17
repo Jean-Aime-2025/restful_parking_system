@@ -94,7 +94,7 @@ const getAllSlots = async (_req: Request, res: Response) => {
 };
 
 // Deassign Slot from User
-const deassignSlot = async (req: Request, res: Response) => {
+const deassignSlot:any = async (req: Request, res: Response) => {
   const { slotId } = req.body;
 
   if (!slotId) {
@@ -102,7 +102,7 @@ const deassignSlot = async (req: Request, res: Response) => {
   }
 
   try {
-    // Find the slot to get associated userId
+    // Find the slot with the assigned user
     const slot = await prisma.slot.findUnique({
       where: { id: slotId },
       include: { user: true },
@@ -112,7 +112,13 @@ const deassignSlot = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Slot not found' });
     }
 
-    // Update the slot: disconnect user, mark as unoccupied
+    if (!slot.user) {
+      return res.status(400).json({ error: 'No user is assigned to this slot' });
+    }
+
+    const userId = slot.user.id;
+
+    // Disconnect the user from the slot and mark as unoccupied
     const updatedSlot = await prisma.slot.update({
       where: { id: slotId },
       data: {
@@ -121,15 +127,35 @@ const deassignSlot = async (req: Request, res: Response) => {
       },
     });
 
-    // Optional: clear assignedSlotId on the user side
-    if (slot.user) {
-      await prisma.user.update({
-        where: { id: slot.user.id },
-        data: {
-          assignedSlotId: null,
-        },
-      });
-    }
+    // Clear assignedSlotId on the user
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        assignedSlotId: null,
+      },
+    });
+
+    // Update PENDING requests to DENIED
+    await prisma.parkingRequest.updateMany({
+      where: {
+        userId,
+        status: 'PENDING',
+      },
+      data: {
+        status: 'DENIED',
+      },
+    });
+
+    // Update APPROVED requests to DEASSIGNED
+    await prisma.parkingRequest.updateMany({
+      where: {
+        userId,
+        status: 'APPROVED',
+      },
+      data: {
+        status: 'DEASSIGNED',
+      },
+    });
 
     return res.json({
       message: 'Slot deassigned from user successfully',
