@@ -104,7 +104,7 @@ export function BarChartComponent() {
               />
             </Bar>
 
-          </BarChart>
+          </BarChart> 
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
