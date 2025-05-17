@@ -9,6 +9,7 @@ import AdminSlots from './pages/admin/Slots';
 import { AdminLayout } from './components/layout/admin-layout';
 import UserLayout from './components/layout/user-layout';
 import { ProtectedRoute } from './components/security/ProtectedRoute';
+import NotFound from './pages/not-found/NotFound';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

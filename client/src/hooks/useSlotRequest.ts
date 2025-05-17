@@ -4,7 +4,7 @@ import {
   getAllSlotRequests,
   acceptRequest,
   rejectRequest,
-} from '@/services/slotRequest.service'
+} from '@/services/slotRequest.service';
 import { toast } from 'sonner';
 
 export const useGetAllRequests = () => {
@@ -18,7 +18,13 @@ export const useGetAllRequests = () => {
 export const useAcceptRequest = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (requestId: string) => acceptRequest(requestId),
+    mutationFn: ({
+      requestId,
+      slotId,
+    }: {
+      requestId: string;
+      slotId: string;
+    }) => acceptRequest(requestId, slotId),
     onSuccess: (data) => {
       toast.success(data.data.message || 'Request approved');
       queryClient.invalidateQueries({ queryKey: ['slot-requests'] });

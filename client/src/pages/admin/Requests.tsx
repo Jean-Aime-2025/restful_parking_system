@@ -3,7 +3,6 @@
 import { RequestsColumns, type RequestDto } from '@/components/columns/request-columns';
 import { DataTable } from '@/components/common/data-table';
 import { useGetAllRequests } from '@/hooks/useSlotRequest';
-import { Loader2 } from 'lucide-react';
 
 const Requests = () => {
   const { data: requests, isLoading, isError } = useGetAllRequests();
@@ -15,16 +14,10 @@ const Requests = () => {
       requesterEmail: req.user?.email ?? 'N/A',
       slotCode: req.user?.assignedSlot?.code ?? 'N/A',
       slotDescription: req.user?.assignedSlot?.description ?? 'N/A',
+      slotId: req.user?.assignedSlot?.id ?? '',
       createdAt: req.createdAt,
     })) ?? [];
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <Loader2 className="animate-spin" size={32} />
-      </div>
-    );
-  }
 
   if (isError) {
     return (
@@ -38,9 +31,10 @@ const Requests = () => {
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
       <DataTable<RequestDto>
         data={tableData}
+        isLoading={isLoading}
         columns={RequestsColumns}
         searchEnabled
-        message={requests.length === 0 && !isLoading ? "No requests found" : undefined}
+        message={'No requests found"'}
       />
     </div>
   );

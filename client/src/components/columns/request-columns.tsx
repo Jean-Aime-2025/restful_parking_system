@@ -11,6 +11,7 @@ export type RequestDto = {
   slotCode: string;
   slotDescription: string;
   createdAt: string;
+  slotId: string;
 };
 
 export const RequestsColumns: ColumnDef<RequestDto>[] = [
@@ -56,7 +57,7 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={() => accept(id)}
+            onClick={() => accept({ requestId: id, slotId: row.original.slotId })}
             title="Accept"
           >
             <Check size={16} />

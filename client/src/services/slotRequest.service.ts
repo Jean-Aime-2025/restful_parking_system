@@ -8,8 +8,10 @@ export const getAllSlotRequests = () => {
   return api.get(`/request-slot/requests/pending-with-slot`);
 };
 
-export const acceptRequest = (requestId: string) => {
-  return api.patch(`/request-slot/requests/${requestId}/accept`);
+export const acceptRequest = (requestId: string, slotId: string) => {
+  return api.patch(`/request-slot/requests/${requestId}/accept`, {
+    slotId,
+  });
 };
 
 export const rejectRequest = (requestId: string) => {

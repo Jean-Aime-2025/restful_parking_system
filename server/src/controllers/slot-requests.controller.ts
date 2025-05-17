@@ -75,21 +75,34 @@ const getAllRequestsHandler:any = async (req: AuthRequest, res: Response) => {
 };
 
 // === Admin: Accept a request and finalize slot ===
-const acceptRequestHandler:any = async (req: Request, res: Response) => {
+const acceptRequestHandler: any = async (req: Request, res: Response) => {
   try {
-    const { requestId, slotId } = req.body;
+    const requestId = req.params.requestId;
+    const { slotId } = req.body;
+
+    if (!requestId || !slotId) {
+      return res.status(400).json({ message: 'Missing requestId or slotId in request body' });
+    }
+
+    console.log('Incoming requestId:', requestId);
+    console.log('Incoming slotId:', slotId);
 
     const request = await prisma.parkingRequest.findUnique({ where: { id: requestId } });
     if (!request) return res.status(404).json({ message: 'Request not found' });
-    if (request.status !== 'PENDING')
+
+    if (request.status !== 'PENDING') {
       return res.status(400).json({ message: 'Request already handled' });
+    }
 
     const slot = await prisma.slot.findUnique({ where: { id: slotId } });
-    if (!slot || slot.occupied) return res.status(400).json({ message: 'Invalid or occupied slot' });
+    if (!slot || slot.occupied) {
+      return res.status(400).json({ message: 'Invalid or occupied slot' });
+    }
 
     const user = await prisma.user.findUnique({ where: { id: request.userId } });
-    if (!user || user.assignedSlotId !== slotId)
+    if (!user || user.assignedSlotId !== slotId) {
       return res.status(400).json({ message: 'User not assigned to this slot or mismatch' });
+    }
 
     await prisma.parkingRequest.update({
       where: { id: requestId },
@@ -103,6 +116,7 @@ const acceptRequestHandler:any = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Request approved and slot finalized' });
   } catch (error: any) {
+    console.error('Error in acceptRequestHandler:', error);
     return res.status(500).json({ message: 'Error approving request', error: error.message });
   }
 };
@@ -181,6 +195,7 @@ const getPendingRequestsWithSlotHandler:any = async (req: AuthRequest, res: Resp
             email: true,
             assignedSlot: {
               select: {
+                id:true,
                 code: true,
                 description: true,
               },
