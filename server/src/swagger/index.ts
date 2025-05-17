@@ -6,7 +6,7 @@ const doc = {
         title: 'NE NodeJS Rest API',
         description: ''
     },
-    host: 'localhost:4040',
+    host: 'localhost:8080',
     basePath: '/api/v1',
     schemes: ['http'],
     consumes: ['application/json'],
