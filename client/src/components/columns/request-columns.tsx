@@ -2,7 +2,7 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Check, X } from 'lucide-react';
-import { useAcceptRequest, useRejectRequest } from '@/hooks/useSlotRequest';
+import { useAcceptParkingRequest, useRejectParkingRequest } from '@/hooks/useParkingRequest';
 
 export type RequestDto = {
   id: string;
@@ -50,14 +50,14 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
       const { id } = row.original;
-      const { mutate: accept } = useAcceptRequest();
-      const { mutate: reject } = useRejectRequest();
+      const { mutate: accept } = useAcceptParkingRequest();
+      const { mutate: reject } = useRejectParkingRequest();
 
       return (
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={() => accept({ requestId: id, slotId: row.original.slotId })}
+            // onClick={() => accept({ requestId: id, slotId: row.original.slotId })}
             title="Accept"
           >
             <Check size={16} />

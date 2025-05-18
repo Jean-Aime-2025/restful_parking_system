@@ -5,8 +5,8 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog';
-import SlotForm from './RequestParkingForm';
 import { Button } from '../ui/button';
+import SlotForm from './slot-form';
 
 type SlotFormDialogProps = {
   open: boolean;

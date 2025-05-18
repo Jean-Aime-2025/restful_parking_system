@@ -6,23 +6,23 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
-import VehicleForm from './VehicleForm';
+import RequestParkingForm from './RequestParkingForm';
 
-type SlotFormDialogProps = {
+type RequestFormDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-const VehicleFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
+const RequestDialog = ({ open, setOpen }: RequestFormDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
         <DialogHeader>
           <DialogTitle className="text-3xl font-semibold">
-            Create New Vehicle
+            Create New Request
           </DialogTitle>
         </DialogHeader>
-        <VehicleForm setOpen={setOpen} />
+        <RequestParkingForm setOpen={setOpen} />
         <DialogClose asChild>
           <Button variant="outline" className="w-full">
             Cancel
@@ -33,4 +33,4 @@ const VehicleFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
   );
 };
 
-export default VehicleFormDialog;
+export default RequestDialog;

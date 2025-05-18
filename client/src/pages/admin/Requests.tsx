@@ -2,10 +2,11 @@
 
 import { RequestsColumns, type RequestDto } from '@/components/columns/request-columns';
 import { DataTable } from '@/components/common/data-table';
-import { useGetAllRequests } from '@/hooks/useSlotRequest';
+import { useAllParkingRequests } from '@/hooks/useParkingRequest';
+// import { useGetAllRequests } from '@/hooks/useSlotRequest';
 
 const Requests = () => {
-  const { data: requests, isLoading, isError } = useGetAllRequests();
+  const { data: requests, isLoading, isError } = useAllParkingRequests();
 
   const tableData: RequestDto[] =
     requests?.map((req: any) => ({

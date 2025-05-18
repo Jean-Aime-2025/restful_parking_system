@@ -10,6 +10,7 @@ import UserLayout from './components/layout/user-layout';
 import { ProtectedRoute } from './components/security/ProtectedRoute';
 import NotFound from './pages/not-found/NotFound';
 import Vehicles from './pages/user/Vehicles';
+import UserRequests from './pages/user/Requests';
 
 function App() {
   return (
@@ -63,6 +64,16 @@ function App() {
           <ProtectedRoute>
             <UserLayout>
               <Vehicles />
+            </UserLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/requests"
+        element={
+          <ProtectedRoute>
+            <UserLayout>
+              <UserRequests />
             </UserLayout>
           </ProtectedRoute>
         }

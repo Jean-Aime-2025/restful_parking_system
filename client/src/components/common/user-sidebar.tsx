@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { BookOpenIcon, ListIcon, User } from 'lucide-react';
+import { BookOpenIcon, ListIcon, Mail, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -25,6 +25,11 @@ const userNavItems = [
     title: 'Vehicles',
     url: '/user/vehicles',
     icon: ListIcon,
+  },
+  {
+    title: 'Requests',
+    url: '/user/requests',
+    icon: Mail,
   },
 ];
 

@@ -10,7 +10,7 @@ import {
   type UpdateSlot,
 } from '@/services/slot.service';
 import { toast } from 'sonner';
-import { requestSlot } from '@/services/slotRequest.service';
+// import { requestSlot } from '@/services/slotRequest.service';
 
 export const useGetSlots = () =>
   useQuery({
