@@ -8,7 +8,7 @@ CREATE TYPE "VerificationStatus" AS ENUM ('VERIFIED', 'PENDING', 'UNVERIFIED');
 CREATE TYPE "PasswordResetStatus" AS ENUM ('PENDING', 'IDLE');
 
 -- CreateEnum
-CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'DENIED');
+CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'DENIED', 'DEASSIGNED');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -43,9 +43,25 @@ CREATE TABLE "slots" (
 );
 
 -- CreateTable
-CREATE TABLE "parking_requests" (
-    "id" SERIAL NOT NULL,
+CREATE TABLE "vehicles" (
+    "id" TEXT NOT NULL,
+    "license" TEXT NOT NULL,
+    "model" TEXT NOT NULL,
+    "color" TEXT,
     "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "vehicles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "parking_requests" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "vehicleId" TEXT NOT NULL,
+    "startTime" TIMESTAMP(3) NOT NULL,
+    "endTime" TIMESTAMP(3) NOT NULL,
+    "notes" TEXT,
     "status" "RequestStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -64,8 +80,17 @@ CREATE UNIQUE INDEX "users_assignedSlotId_key" ON "users"("assignedSlotId");
 -- CreateIndex
 CREATE UNIQUE INDEX "slots_code_key" ON "slots"("code");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "vehicles_license_key" ON "vehicles"("license");
+
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_assignedSlotId_fkey" FOREIGN KEY ("assignedSlotId") REFERENCES "slots"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "parking_requests" ADD CONSTRAINT "parking_requests_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "parking_requests" ADD CONSTRAINT "parking_requests_vehicleId_fkey" FOREIGN KEY ("vehicleId") REFERENCES "vehicles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -2,9 +2,10 @@ import { Router } from "express";
 import authRouter from "./auth.route";
 import userRouter from "./user.route";
 import slotRouter from "./slot.route";
-import slotRequestsRouter from "./slot-requests";
 import adminDashboardRouter from "./admin-dahboard.route";
 import userDashboardRouter from "./user-dahboard.route";
+import vehicleRouter from "./vehicle.route";
+import parkingRequestsRouter from "./parking-requests";
 
 const router = Router()
 
@@ -32,9 +33,9 @@ router.use("/slot", slotRouter
         }] 
     */
 )
-router.use("/request-slot", slotRequestsRouter
+router.use("/requests", parkingRequestsRouter
     /*
-        #swagger.tags = ['Slots-Requests']
+        #swagger.tags = ['Parking-Requests']
         #swagger.security = [{
                 "bearerAuth": []
         }] 
@@ -49,6 +50,14 @@ router.use("/admin", adminDashboardRouter
     */
 )
 router.use("/dashboard", userDashboardRouter
+    /*
+        #swagger.tags = ['user-dashboard']
+        #swagger.security = [{
+                "bearerAuth": []
+        }] 
+    */
+)
+router.use("/vehicles", vehicleRouter
     /*
         #swagger.tags = ['user-dashboard']
         #swagger.security = [{

@@ -3,7 +3,8 @@ import { Request, RequestHandler } from "express";
 export interface AuthRequest extends Request {
     user: {
         id: string;
-        assignedSlotId?: string | null;
+        role?: string;
+        assignedSlotId?: string;
     }
 }
 

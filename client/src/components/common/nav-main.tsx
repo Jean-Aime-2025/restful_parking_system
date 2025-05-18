@@ -1,5 +1,4 @@
-
-import { PlusCircleIcon, MoveRight, type LucideIcon, Eye } from 'lucide-react';
+import { PlusCircleIcon, MoveRight, type LucideIcon } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 import { useLocation } from 'react-router-dom';
@@ -20,6 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import RequestParkingForm from './RequestParkingForm';
 import SlotForm from './slot-form';
 
 export function NavMain({
@@ -60,7 +60,7 @@ export function NavMain({
                       Create New Slot
                     </DialogTitle>
                   </DialogHeader>
-                  <SlotForm setOpen={setOpen}/>
+                  <SlotForm setOpen={setOpen} />
                   <DialogClose asChild>
                     <Button variant="outline" className="w-full">
                       Cancel
@@ -81,15 +81,31 @@ export function NavMain({
         ) : (
           <SidebarMenu>
             <SidebarMenuItem className="flex items-center gap-2">
-              <NavLink to="/user/slots" className="w-full">
-                <SidebarMenuButton
-                  tooltip={quickActionLabel}
-                  className="w-full min-w-8 bg-slate-200 duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-                >
-                  <Eye />
-                  <span>{quickActionLabel}</span>
-                </SidebarMenuButton>
-              </NavLink>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <SidebarMenuButton
+                    tooltip={quickActionLabel}
+                    className="min-w-8 bg-slate-200 duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+                  >
+                    <PlusCircleIcon />
+                    <span>{quickActionLabel}</span>
+                  </SidebarMenuButton>
+                </DialogTrigger>
+
+                <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
+                  <DialogHeader>
+                    <DialogTitle className="text-3xl font-semibold">
+                      Create New Request
+                    </DialogTitle>
+                  </DialogHeader>
+                  <RequestParkingForm setOpen={setOpen} />
+                  <DialogClose asChild>
+                    <Button variant="outline" className="w-full">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                </DialogContent>
+              </Dialog>
 
               <Button
                 size="icon"

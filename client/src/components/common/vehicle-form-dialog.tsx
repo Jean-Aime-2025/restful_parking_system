@@ -13,13 +13,13 @@ type SlotFormDialogProps = {
   setOpen: (open: boolean) => void;
 };
 
-const SlotFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
+const VehicleFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
         <DialogHeader>
           <DialogTitle className="text-3xl font-semibold">
-            Create New Slot
+            Create New Vehicle
           </DialogTitle>
         </DialogHeader>
         <SlotForm setOpen={setOpen} />
@@ -33,4 +33,4 @@ const SlotFormDialog = ({ open, setOpen }: SlotFormDialogProps) => {
   );
 };
 
-export default SlotFormDialog;
+export default VehicleFormDialog;

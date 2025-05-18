@@ -10,20 +10,17 @@ datasource db {
 enum Role {
   ADMIN
   USER
-
 }
 
 enum VerificationStatus {
   VERIFIED
   PENDING
   UNVERIFIED
-
 }
 
 enum PasswordResetStatus {
   PENDING
   IDLE
-
 }
 
 enum RequestStatus {
@@ -54,27 +51,47 @@ model User {
   assignedSlot         Slot?               @relation("UserAssignedSlot", fields: [assignedSlotId], references: [id])
 
   parkingRequests      ParkingRequest[]
+  vehicles             Vehicle[]
 
   @@map("users")
 }
 
 model Slot {
-  id        String  @id @default(uuid())
-  code      String  @unique
-  occupied  Boolean @default(false)
+  id          String  @id @default(uuid())
+  code        String  @unique
+  occupied    Boolean @default(false)
   description String?
 
-  user      User?   @relation("UserAssignedSlot")
+  user        User?   @relation("UserAssignedSlot")
 
   @@map("slots")
 }
 
+model Vehicle {
+  id         String  @id @default(uuid())
+  platenumber    String  @unique
+  model      String
+  color      String?
+  user       User    @relation(fields: [userId], references: [id])
+  userId     String
+  createdAt  DateTime @default(now())
+
+  parkingRequests ParkingRequest[]
+
+  @@map("vehicles")
+}
+
 model ParkingRequest {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   
-  status    RequestStatus @default(PENDING)
-  createdAt DateTime @default(now())
+  id         String        @id @default(uuid())
+  user       User          @relation(fields: [userId], references: [id])
+  userId     String
+  vehicle    Vehicle       @relation(fields: [vehicleId], references: [id])
+  vehicleId  String
+  startTime  DateTime
+  endTime    DateTime
+  notes      String?
+  status     RequestStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
 
   @@map("parking_requests")
 }

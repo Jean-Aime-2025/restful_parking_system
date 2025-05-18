@@ -4,12 +4,12 @@ import Register from './pages/auth/Register';
 import AdminDashboard from './pages/admin/Dashboard';
 import Requests from './pages/admin/Requests';
 import UserDashboard from './pages/user/Dashboard';
-import UserSlots from './pages/user/Slots';
 import AdminSlots from './pages/admin/Slots';
 import { AdminLayout } from './components/layout/admin-layout';
 import UserLayout from './components/layout/user-layout';
 import { ProtectedRoute } from './components/security/ProtectedRoute';
 import NotFound from './pages/not-found/NotFound';
+import Vehicles from './pages/user/Vehicles';
 
 function App() {
   return (
@@ -58,11 +58,11 @@ function App() {
         }
       />
       <Route
-        path="/user/slots"
+        path="/user/vehicles"
         element={
           <ProtectedRoute>
             <UserLayout>
-              <UserSlots />
+              <Vehicles />
             </UserLayout>
           </ProtectedRoute>
         }

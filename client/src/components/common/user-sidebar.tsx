@@ -22,8 +22,8 @@ const userNavItems = [
     icon: BookOpenIcon,
   },
   {
-    title: 'Slots',
-    url: '/user/slots',
+    title: 'Vehicles',
+    url: '/user/vehicles',
     icon: ListIcon,
   },
 ];
@@ -49,7 +49,7 @@ export function UserSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={userNavItems} quickActionLabel="View Slots" />
+        <NavMain items={userNavItems} quickActionLabel="Request parking" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser
