@@ -7,3 +7,5 @@
 [2025-05-19T22:56:05.921Z] INFO: GET /api/v1/slot - ::1
 [2025-05-19T22:56:09.455Z] INFO: DELETE /api/v1/slot/b6a60dc3-9688-4e13-8199-3f8dba4e3ceb - ::1
 [2025-05-19T22:56:09.513Z] INFO: GET /api/v1/slot - ::1
+[2025-05-19T22:56:39.956Z] INFO: GET /api/v1/user/me - ::1
+[2025-05-19T22:56:39.958Z] INFO: GET /api/v1/slot - ::1
