@@ -44,25 +44,29 @@ export const useAllParkingRequests = () =>
   });
 
 // Admin: accept request
-export const useAcceptParkingRequest = (
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) =>
+export const useAcceptParkingRequest = () =>
   useMutation({
     mutationFn: (requestId: string) => acceptParkingRequest(requestId),
-    onSuccess,
-    onError,
+    onSuccess: () => {
+      toast.success('Parking request accepted!');
+    },
+    onError: (error: any) => {
+      console.error(error);
+      toast.error('Failed to accept parking request. Please try again.');
+    },
   });
 
 // Admin: reject request
-export const useRejectParkingRequest = (
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) =>
+export const useRejectParkingRequest = () =>
   useMutation({
     mutationFn: (requestId: string) => rejectParkingRequest(requestId),
-    onSuccess,
-    onError,
+    onSuccess: () => {
+      toast.success('Parking request rejected.');
+    },
+    onError: (error: any) => {
+      console.error(error);
+      toast.error('Failed to reject parking request. Please try again.');
+    },
   });
 
 // Admin: get pending requests

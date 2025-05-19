@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import EditSlotForm from '../common/edit-slot-form';
 import { useState } from 'react';
-import { useDeassignSlot, useDeleteSlot } from '@/hooks/useSlot';
+import { useDeassignSlot, useDeleteSlot } from '@/hooks/useslots';
 
 export type SlotDto = {
   id: string;

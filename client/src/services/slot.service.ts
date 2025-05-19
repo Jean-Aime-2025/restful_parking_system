@@ -24,6 +24,9 @@ export const updateSlot = (data: UpdateSlot) => {
 export const getAvailableSlots = () => {
   return api.get('/slot/available');
 };
+export const getSlots = () => {
+  return api.get('/slot');
+};
 
 export const deleteSlot = (slotId: string) => {
   return api.delete(`/slot/${slotId}`);

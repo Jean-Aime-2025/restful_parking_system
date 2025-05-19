@@ -20,6 +20,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import RequestParkingForm from './RequestParkingForm';
+import SlotForm from './slot-form';
 
 export function NavMain({
   items,
@@ -59,7 +60,7 @@ export function NavMain({
                       Create New Slot
                     </DialogTitle>
                   </DialogHeader>
-                  <RequestParkingForm setOpen={setOpen} />
+                  <SlotForm setOpen={setOpen} />
                   <DialogClose asChild>
                     <Button variant="outline" className="w-full">
                       Cancel

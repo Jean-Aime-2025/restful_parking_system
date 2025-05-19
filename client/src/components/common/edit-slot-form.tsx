@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ClipLoader } from 'react-spinners';
 import { Textarea } from '../ui/textarea';
-import { useUpdateSlot } from '@/hooks/useSlot';  
 import type { SlotDto } from '../columns/admin-slots-columns';
+import { useUpdateSlot } from '@/hooks/useslots';
 
 
 type SlotFormProps = {

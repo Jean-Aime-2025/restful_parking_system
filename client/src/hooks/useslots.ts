@@ -5,14 +5,24 @@ import {
   deassignSlot,
   deleteSlot,
   getAvailableSlots,
+  // getAvailableSlots,
+  getSlots,
   updateSlot,
   type CreateSlot,
   type UpdateSlot,
 } from '@/services/slot.service';
 import { toast } from 'sonner';
-// import { requestSlot } from '@/services/slotRequest.service';
 
 export const useGetSlots = () =>
+  useQuery({
+    queryKey: ['slots'],
+    queryFn: async () => {
+      const response = await getSlots();
+      return response.data;
+    },
+  });
+  
+export const useGetAvailableSlots = () =>
   useQuery({
     queryKey: ['slots'],
     queryFn: async () => {
@@ -20,21 +30,6 @@ export const useGetSlots = () =>
       return response.data;
     },
   });
-
-export const useRequestSlot = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (slotId: string) => requestSlot(slotId),
-    onSuccess: (data) => {
-      toast.success(data.data.message || 'Slot requested successfully');
-      queryClient.invalidateQueries({ queryKey: ['slots'] });
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Failed to request slot');
-    },
-  });
-};
 
 export const useCreateSlot = () => {
   const queryClient = useQueryClient();

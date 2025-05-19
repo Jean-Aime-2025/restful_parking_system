@@ -175,15 +175,6 @@ const getAvailableSlots:any = async (_req: Request, res: Response) => {
     const slots = await prisma.slot.findMany({
       where: {
         occupied: false,
-        user: {
-          parkingRequests: {
-            some: {
-              status: {
-                in: ['DENIED', 'DEASSIGNED'],
-              },
-            },
-          },
-        },
       }
     });
 

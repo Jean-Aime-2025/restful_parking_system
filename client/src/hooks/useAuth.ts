@@ -7,7 +7,6 @@ import api from '@/lib/api';
 import { setCookie } from '@/utils/cookie';
 import { useAuthContext } from '@/context/AuthContext';
 
-
 export const useAuth = () => {
   const navigate = useNavigate();
   const { setAuthenticated } = useAuthContext();

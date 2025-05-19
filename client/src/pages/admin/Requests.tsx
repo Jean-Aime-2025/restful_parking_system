@@ -13,11 +13,10 @@ const Requests = () => {
       id: req.id,
       requesterName: req.user?.names ?? 'Unknown',
       requesterEmail: req.user?.email ?? 'N/A',
-      slotCode: req.user?.assignedSlot?.code ?? 'N/A',
-      slotDescription: req.user?.assignedSlot?.description ?? 'N/A',
-      slotId: req.user?.assignedSlot?.id ?? '',
       createdAt: req.createdAt,
     })) ?? [];
+
+    console.log(requests);
 
 
   if (isError) {

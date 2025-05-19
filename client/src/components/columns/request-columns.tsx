@@ -8,10 +8,7 @@ export type RequestDto = {
   id: string;
   requesterName: string;
   requesterEmail: string;
-  slotCode: string;
-  slotDescription: string;
   createdAt: string;
-  slotId: string;
 };
 
 export const RequestsColumns: ColumnDef<RequestDto>[] = [
@@ -26,16 +23,6 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     accessorKey: 'requesterEmail',
     header: 'Email',
     cell: ({ row }) => <div>{row.original.requesterEmail}</div>,
-  },
-  {
-    accessorKey: 'slotCode',
-    header: 'Slot Code',
-    cell: ({ row }) => <div>{row.original.slotCode}</div>,
-  },
-  {
-    accessorKey: 'slotDescription',
-    header: 'Slot Description',
-    cell: ({ row }) => <div>{row.original.slotDescription}</div>,
   },
   {
     accessorKey: 'createdAt',
@@ -57,7 +44,7 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            // onClick={() => accept({ requestId: id, slotId: row.original.slotId })}
+            onClick={() => accept(row.original.id)}
             title="Accept"
           >
             <Check size={16} />

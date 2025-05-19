@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ClipLoader } from 'react-spinners';
 import { Textarea } from '../ui/textarea';
-import { useCreateSlot } from '@/hooks/useSlot';
+import { useCreateSlot } from '@/hooks/useslots';
 
 type SlotFormProps = {
   setOpen: (open: boolean) => void;
