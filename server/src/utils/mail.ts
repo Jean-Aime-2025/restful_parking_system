@@ -83,4 +83,62 @@ const sendPaswordResetEmail = async (email: string, names: string, passwordReset
     }
 };
 
-export { sendAccountVerificationEmail, sendPaswordResetEmail };
+const sendParkingRequestApprovedEmail = async (email: string, names: string, slotName: string) => {
+    try {
+        await transporter.sendMail({
+            from: process.env.MAIL_USER,
+            to: email,
+            subject: "Parking Request Approved",
+            html: `
+                <html>
+                <body>
+                    <h2>Dear ${names},</h2>
+                    <p>Your parking request has been <strong>approved</strong>.</p>
+                    <p>Your assigned slot is: <strong>${slotName}</strong>.</p>
+                    <p>Thank you for using our service.</p>
+                    <br/>
+                    <p>Best regards,<br/>Parking Management Team</p>
+                </body>
+                </html>
+            `
+        });
+
+        return { message: "Approval email sent", status: true };
+    } catch (error) {
+        console.error("Approval email error:", error);
+        return { message: "Failed to send approval email", status: false };
+    }
+};
+
+const sendParkingRequestRejectedEmail = async (email: string, names: string) => {
+    try {
+        await transporter.sendMail({
+            from: process.env.MAIL_USER,
+            to: email,
+            subject: "Parking Request Rejected",
+            html: `
+                <html>
+                <body>
+                    <h2>Dear ${names},</h2>
+                    <p>We regret to inform you that your parking request has been <strong>rejected</strong>.</p>
+                    <p>Please contact support for more information or try again later.</p>
+                    <br/>
+                    <p>Best regards,<br/>Parking Management Team</p>
+                </body>
+                </html>
+            `
+        });
+
+        return { message: "Rejection email sent", status: true };
+    } catch (error) {
+        console.error("Rejection email error:", error);
+        return { message: "Failed to send rejection email", status: false };
+    }
+};
+
+export {
+    sendAccountVerificationEmail,
+    sendPaswordResetEmail,
+    sendParkingRequestApprovedEmail,
+    sendParkingRequestRejectedEmail
+};

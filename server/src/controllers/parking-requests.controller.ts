@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
-import { RequestStatus } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
-import { AuthRequest } from "../types";
+import { Request, Response } from 'express';
+import { RequestStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { AuthRequest } from '../types';
+import {
+  sendParkingRequestApprovedEmail,
+  sendParkingRequestRejectedEmail,
+} from '../utils/mail';
 
 const prisma = new PrismaClient();
 
@@ -23,7 +27,7 @@ const requestParkingHandler: any = async (req: AuthRequest, res: Response) => {
 
     if (existingRequest) {
       return res.status(400).json({
-        error: "This vehicle already has an active or pending parking request.",
+        error: 'This vehicle already has an active or pending parking request.',
       });
     }
 
@@ -40,11 +44,10 @@ const requestParkingHandler: any = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(request);
   } catch (error) {
-    console.error("Error creating request:", error);
-    res.status(500).json({ error: "Failed to create request" });
+    console.error('Error creating request:', error);
+    res.status(500).json({ error: 'Failed to create request' });
   }
 };
-
 
 // 2. Get All Requests (Admin)
 const getAllRequestsHandler = async (_req: Request, res: Response) => {
@@ -57,7 +60,7 @@ const getAllRequestsHandler = async (_req: Request, res: Response) => {
     });
     res.status(200).json(requests);
   } catch (error) {
-    res.status(500).json({ error: "Error retrieving requests" });
+    res.status(500).json({ error: 'Error retrieving requests' });
   }
 };
 
@@ -70,18 +73,21 @@ const acceptRequestHandler = async (req: Request, res: Response) => {
       where: { id: requestId },
     });
 
-    if (!request) return res.status(404).json({ error: "Request not found" });
+    if (!request) return res.status(404).json({ error: 'Request not found' });
     if (request.status !== RequestStatus.PENDING)
-      return res.status(400).json({ error: "Only pending requests can be accepted" });
+      return res
+        .status(400)
+        .json({ error: 'Only pending requests can be accepted' });
 
     const availableSlots = await prisma.slot.findMany({
       where: { occupied: false },
     });
 
     if (!availableSlots.length)
-      return res.status(400).json({ error: "No available slots" });
+      return res.status(400).json({ error: 'No available slots' });
 
-    const randomSlot = availableSlots[Math.floor(Math.random() * availableSlots.length)];
+    const randomSlot =
+      availableSlots[Math.floor(Math.random() * availableSlots.length)];
 
     await prisma.$transaction([
       prisma.slot.update({
@@ -98,10 +104,31 @@ const acceptRequestHandler = async (req: Request, res: Response) => {
       }),
     ]);
 
-    res.status(200).json({ message: "Request accepted and slot assigned", slot: randomSlot });
+    const user = await prisma.user.findUnique({
+      where: { id: request.userId },
+    });
+
+    if (user) {
+      await sendParkingRequestApprovedEmail(
+        user.email,
+        user.names,
+        randomSlot.code || randomSlot.id
+      );
+    } else {
+      console.warn(
+        `User with ID ${request.userId} not found when sending approval email.`
+      );
+    }
+
+    res
+      .status(200)
+      .json({
+        message: 'Request accepted and slot assigned',
+        slot: randomSlot,
+      });
   } catch (error) {
-    console.error("Error accepting request:", error);
-    res.status(500).json({ error: "Failed to accept request" });
+    console.error('Error accepting request:', error);
+    res.status(500).json({ error: 'Failed to accept request' });
   }
 };
 
@@ -114,21 +141,33 @@ const rejectRequestHandler = async (req: Request, res: Response) => {
       where: { id: requestId },
     });
 
-    if (!request) return res.status(404).json({ error: "Request not found" });
+    if (!request) return res.status(404).json({ error: 'Request not found' });
 
     const updated = await prisma.parkingRequest.update({
       where: { id: requestId },
       data: { status: RequestStatus.DENIED },
     });
 
-    res.status(200).json({ message: "Request denied", request: updated });
+    const user = await prisma.user.findUnique({
+      where: { id: request.userId },
+    });
+
+    if (user) {
+      await sendParkingRequestRejectedEmail(user.email, user.names);
+    } else {
+      console.warn(
+        `User with ID ${request.userId} not found when sending rejection email.`
+      );
+    }
+
+    res.status(200).json({ message: 'Request denied', request: updated });
   } catch (error) {
-    res.status(500).json({ error: "Failed to reject request" });
+    res.status(500).json({ error: 'Failed to reject request' });
   }
 };
 
 // 5. Get User’s Requests (User)
-const getUserRequestHandler:any = async (req: AuthRequest, res: Response) => {
+const getUserRequestHandler: any = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user.id;
 
@@ -142,7 +181,7 @@ const getUserRequestHandler:any = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(requests);
   } catch (error) {
-    res.status(500).json({ error: "Error getting user requests" });
+    res.status(500).json({ error: 'Error getting user requests' });
   }
 };
 
@@ -163,7 +202,7 @@ const getPendingRequestsHandler = async (_req: Request, res: Response) => {
 
     res.status(200).json(requests);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching pending requests" });
+    res.status(500).json({ error: 'Error fetching pending requests' });
   }
 };
 
