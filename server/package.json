@@ -37,7 +37,8 @@
     "pdfkit": "^0.17.1",
     "pg": "^8.11.1",
     "swagger-autogen": "^2.23.7",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
