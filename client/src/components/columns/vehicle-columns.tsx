@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { type ColumnDef } from '@tanstack/react-table';
-import {NotebookPen, Trash } from 'lucide-react';
+import { NotebookPen, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -19,7 +20,9 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
   {
     accessorKey: 'platenumber',
     header: 'Plate Number',
-    cell: ({ row }) => <div className="font-medium">{row.original.platenumber}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium">{row.original.platenumber}</div>
+    ),
   },
   {
     accessorKey: 'model',
@@ -64,11 +67,16 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                 <NotebookPen size={18} />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
+            <DialogContent className="sm:max-w-[700px] px-[3%] py-10 rounded-3xl">
               <DialogHeader className="flex flex-col gap-4">
                 <DialogTitle className="text-2xl">Edit Vehicle</DialogTitle>
               </DialogHeader>
-              <EditVehicleForm setOpen={setEditOpen} vehicle={vehicle}/>
+              <EditVehicleForm setOpen={setEditOpen} vehicle={vehicle} />
+            <DialogClose asChild>
+              <Button variant="outline" className="w-full">
+                Cancel
+              </Button>
+            </DialogClose>
             </DialogContent>
           </Dialog>
 

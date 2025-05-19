@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useUpdateVehicle } from '@/hooks/useVehicle';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 interface Props {
   setOpen: (open: boolean) => void;
@@ -33,24 +34,30 @@ const EditVehicleForm = ({ setOpen, vehicle }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Input
-        value={form.platenumber}
-        onChange={(e) => setForm({ ...form, platenumber: e.target.value })}
-        placeholder="Plate Number"
-        required
-      />
-      <Input
-        value={form.model}
-        onChange={(e) => setForm({ ...form, model: e.target.value })}
-        placeholder="Model"
-        required
-      />
-      <Input
-        value={form.color}
-        onChange={(e) => setForm({ ...form, color: e.target.value })}
-        placeholder="Color"
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div className="grid gap-2">
+        <Label htmlFor="platenumber">Plate number</Label>
+        <Input
+          value={form.platenumber}
+          onChange={(e) => setForm({ ...form, platenumber: e.target.value })}
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="platenumber">Model</Label>
+        <Input
+          value={form.model}
+          onChange={(e) => setForm({ ...form, model: e.target.value })}
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="platenumber">Color</Label>
+        <Input
+          value={form.color}
+          onChange={(e) => setForm({ ...form, color: e.target.value })}
+        />
+      </div>
       <Button type="submit" disabled={updateVehicle.isPending}>
         {updateVehicle.isPending ? 'Updating...' : 'Update'}
       </Button>

@@ -79,7 +79,7 @@ export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
                 <NotebookPen size={19} />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[700px] px-[5%] py-10">
+            <DialogContent className="sm:max-w-[700px] px-[3%] py-10 rounded-3xl">
               <DialogHeader className="flex flex-col gap-4">
                 <DialogTitle className="text-2xl">Edit Slot</DialogTitle>
               </DialogHeader>

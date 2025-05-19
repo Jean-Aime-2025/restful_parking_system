@@ -6,15 +6,31 @@ import { AuthRequest } from "../types";
 const prisma = new PrismaClient();
 
 // 1. Create Parking Request (User)
-const requestParkingHandler:any = async (req: AuthRequest, res: Response) => {
+const requestParkingHandler: any = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
+    const { vehicleId, startTime, endTime, notes } = req.body;
 
-    const { vehicleId, startTime, endTime, notes } = req.body; 
+    // Check if the vehicle has a request already that is not DENIED or DEASSIGNED
+    const existingRequest = await prisma.parkingRequest.findFirst({
+      where: {
+        vehicleId,
+        status: {
+          in: [RequestStatus.PENDING, RequestStatus.APPROVED],
+        },
+      },
+    });
 
+    if (existingRequest) {
+      return res.status(400).json({
+        error: "This vehicle already has an active or pending parking request.",
+      });
+    }
+
+    // Create a new parking request
     const request = await prisma.parkingRequest.create({
       data: {
-        userId,           
+        userId,
         vehicleId,
         startTime: new Date(startTime),
         endTime: new Date(endTime),
@@ -28,6 +44,7 @@ const requestParkingHandler:any = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: "Failed to create request" });
   }
 };
+
 
 // 2. Get All Requests (Admin)
 const getAllRequestsHandler = async (_req: Request, res: Response) => {
