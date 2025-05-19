@@ -3,14 +3,9 @@ import { type ColumnDef } from '@tanstack/react-table';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const requestColumns: ColumnDef<any>[] = [
   {
-    accessorKey: 'user.names',
-    header: 'User',
-    cell: ({ row }) => <div className='py-2'>{row.original.user?.names}</div>,
-  },
-  {
     accessorKey: 'vehicle.platenumber',
     header: 'Plate Number',
-    cell: ({ row }) => <div>{row.original.vehicle?.platenumber}</div>,
+    cell: ({ row }) => <div className='py-2'>{row.original.vehicle?.platenumber}</div>,
   },
   {
     accessorKey: 'startTime',
