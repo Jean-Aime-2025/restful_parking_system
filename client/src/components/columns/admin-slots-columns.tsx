@@ -74,7 +74,7 @@ export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
         <div className="flex justify-center gap-2">
           {/* Edit dialog */}
           <Dialog open={editOpen} onOpenChange={setEditOpen}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button className="!px-[10px] !py-2 rounded-full" title="Edit">
                 <NotebookPen size={19} />
               </Button>
@@ -89,7 +89,7 @@ export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
 
           {/* Delete dialog */}
           <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button className="!px-[10px] !py-2 rounded-full" title="Delete">
                 <Trash size={20} />
               </Button>
@@ -135,7 +135,7 @@ export const AdminSlotsColumns: ColumnDef<SlotDto>[] = [
 
       return slot.status === 'occupied' ? (
         <Dialog open={revokeOpen} onOpenChange={setRevokeOpen}>
-          <DialogTrigger>
+          <DialogTrigger asChild>
             <Button className="!px-[10px] !py-2 rounded-full" title="Delete">
               <Undo2 size={20} />
             </Button>

@@ -12,7 +12,7 @@ const Requests = () => {
     requests?.map((req: any) => ({
       id: req.id,
       requesterName: req.user?.names ?? 'Unknown',
-      requesterEmail: req.user?.email ?? 'N/A',
+      vehiclePlateNumber: req.vehicle?.platenumber ?? 'N/A',
       createdAt: req.createdAt,
     })) ?? [];
 

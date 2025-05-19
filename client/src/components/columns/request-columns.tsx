@@ -2,12 +2,15 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Check, X } from 'lucide-react';
-import { useAcceptParkingRequest, useRejectParkingRequest } from '@/hooks/useParkingRequest';
+import {
+  useAcceptParkingRequest,
+  useRejectParkingRequest,
+} from '@/hooks/useParkingRequest';
 
 export type RequestDto = {
   id: string;
   requesterName: string;
-  requesterEmail: string;
+  vehiclePlateNumber: string;
   createdAt: string;
 };
 
@@ -20,9 +23,9 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     ),
   },
   {
-    accessorKey: 'requesterEmail',
-    header: 'Email',
-    cell: ({ row }) => <div>{row.original.requesterEmail}</div>,
+    accessorKey: 'vehiclePlateNumber',
+    header: 'Plate Number',
+    cell: ({ row }) => <div>{row.original.vehiclePlateNumber}</div>,
   },
   {
     accessorKey: 'createdAt',
