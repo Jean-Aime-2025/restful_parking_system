@@ -24,6 +24,21 @@ export const requestColumns: ColumnDef<any>[] = [
     cell: ({ row }) =>
       <div>{new Date(row.original.endTime).toLocaleString()}</div>,
   },
+
+  // ✅ Hours Expected Column
+  {
+    id: 'hoursExpected',
+    header: 'Hours Expected',
+    cell: ({ row }) => {
+      const start = new Date(row.original.startTime);
+      const end = new Date(row.original.endTime);
+      const diffMs = end.getTime() - start.getTime();
+      const hours = diffMs / (1000 * 60 * 60);
+      const rounded = Math.round(hours * 100) / 100; // round to 2 decimals
+      return <div>{rounded} hrs</div>;
+    },
+  },
+
   {
     accessorKey: 'notes',
     header: 'Notes',

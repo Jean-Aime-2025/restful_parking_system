@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useGetMyVehicles } from '@/hooks/useVehicle';
-import { useCreateParkingRequest } from '@/hooks/useParkingRequest'; 
+import { useCreateParkingRequest } from '@/hooks/useParkingRequest';
 
 type RequestParkingFormProps = {
   setOpen: (open: boolean) => void;
@@ -26,11 +26,12 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
   });
 
   const [entryDate, setEntryDate] = useState<Date | undefined>();
+  const [entryTime, setEntryTime] = useState<string>(''); // HH:MM
   const [exitDate, setExitDate] = useState<Date | undefined>();
+  const [exitTime, setExitTime] = useState<string>(''); // HH:MM
   const [isPending, setIsPending] = useState(false);
 
   const { data: vehicles, isLoading } = useGetMyVehicles();
-
   const { mutate: createRequest } = useCreateParkingRequest(setOpen, setIsPending);
 
   const handleChange = (
@@ -43,20 +44,33 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
     }));
   };
 
+  const combineDateAndTime = (date: Date, time: string): Date => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const newDate = new Date(date);
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    newDate.setSeconds(0);
+    newDate.setMilliseconds(0);
+    return newDate;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!entryDate || !exitDate) {
-      setIsPending(false);
+    if (!entryDate || !exitDate || !entryTime || !exitTime) {
+      alert('Please select both date and time for entry and exit.');
       return;
     }
 
     setIsPending(true);
 
+    const startTime = combineDateAndTime(entryDate, entryTime);
+    const endTime = combineDateAndTime(exitDate, exitTime);
+
     const payload = {
       vehicleId: formData.car,
-      startTime: entryDate.toISOString(),
-      endTime: exitDate.toISOString(),
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
       notes: formData.note || undefined,
     };
 
@@ -92,9 +106,9 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
-        {/* Entry Date */}
+        {/* Entry Date + Time */}
         <div className="grid gap-2">
-          <Label htmlFor="entryDate">Entry date - time</Label>
+          <Label htmlFor="entryDate">Entry date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -117,11 +131,20 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
               />
             </PopoverContent>
           </Popover>
+
+          {/* Time input */}
+          <input
+            type="time"
+            value={entryTime}
+            onChange={(e) => setEntryTime(e.target.value)}
+            required
+            className="border rounded px-3 py-2 text-sm"
+          />
         </div>
 
-        {/* Exit Date */}
+        {/* Exit Date + Time */}
         <div className="grid gap-2">
-          <Label htmlFor="exitDate">Exit date - time</Label>
+          <Label htmlFor="exitDate">Exit date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -144,17 +167,27 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
               />
             </PopoverContent>
           </Popover>
+
+          {/* Time input */}
+          <input
+            type="time"
+            value={exitTime}
+            onChange={(e) => setExitTime(e.target.value)}
+            required
+            className="border rounded px-3 py-2 text-sm"
+          />
         </div>
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="note">Note (Optional)</Label>
+        <Label htmlFor="note">Note</Label>
         <Textarea
           id="note"
           name="note"
           placeholder="Need it urgently..."
           value={formData.note}
           onChange={handleChange}
+          required
         />
       </div>
 
