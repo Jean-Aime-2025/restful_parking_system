@@ -13,6 +13,8 @@ parkingRequestsRouter.post(
   parkingRequestsController.requestParkingHandler
 );
 parkingRequestsRouter.get('/my', parkingRequestsController.getUserRequestHandler);
+parkingRequestsRouter.patch('/edit/:requestId', parkingRequestsController.editRequestHandler);
+parkingRequestsRouter.delete('/cancel/:requestId', parkingRequestsController.cancelRequestHandler);
 
 parkingRequestsRouter.use(checkAdmin)
 parkingRequestsRouter.get('/all', parkingRequestsController.getAllRequestsHandler);

@@ -209,6 +209,87 @@ const getPendingRequestsHandler = async (_req: Request, res: Response) => {
   }
 };
 
+// 7. Edit Parking Request (User)
+const editRequestHandler:any = async (req: AuthRequest, res: Response) => {
+  try {
+    const { requestId } = req.params;
+    const userId = req.user.id;
+    const { startTime, endTime, notes } = req.body;
+
+    const request = await prisma.parkingRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    if (request.userId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to edit this request' });
+    }
+
+    if (request.status !== RequestStatus.PENDING) {
+      return res.status(400).json({ error: 'Only pending requests can be edited' });
+    }
+
+    await prisma.parkingRequest.update({
+      where: { id: requestId },
+      data: {
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+        notes,
+      },
+    });
+
+    res.status(200).json({ message: 'Request updated successfully' });
+  } catch (error) {
+    console.error('Error editing request:', error);
+    res.status(500).json({ error: 'Failed to update request' });
+  }
+};
+
+// 8. Cancel/Delete Parking Request (User)
+const cancelRequestHandler:any = async (req: AuthRequest, res: Response) => {
+  try {
+    const { requestId } = req.params;
+    const userId = req.user.id;
+
+    const request = await prisma.parkingRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    if (request.userId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to cancel this request' });
+    }
+
+    if (request.status !== RequestStatus.PENDING) {
+      return res.status(400).json({ error: 'Only pending requests can be canceled' });
+    }
+
+    const now = new Date();
+    if (new Date(request.startTime).getTime() - now.getTime() < 30 * 60 * 1000) {
+      return res.status(400).json({
+        error: 'Cannot cancel less than 30 minutes before start time.',
+      });
+    }
+
+    await prisma.parkingRequest.update({
+      where: { id: requestId },
+      data: { status: RequestStatus.DEASSIGNED },
+    });
+
+    res.status(200).json({ message: 'Request cancelled successfully' });
+  } catch (error) {
+    console.error('Error canceling request:', error);
+    res.status(500).json({ error: 'Failed to cancel request' });
+  }
+};
+
+
 const parkingRequestsController = {
   requestParkingHandler,
   getAllRequestsHandler,
@@ -216,6 +297,11 @@ const parkingRequestsController = {
   rejectRequestHandler,
   getUserRequestHandler,
   getPendingRequestsHandler,
+  editRequestHandler,     
+  cancelRequestHandler,    
 };
+
+
+
 
 export default parkingRequestsController;
