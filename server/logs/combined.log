@@ -9,3 +9,15 @@
 [2025-05-19T22:56:09.513Z] INFO: GET /api/v1/slot - ::1
 [2025-05-19T22:56:39.956Z] INFO: GET /api/v1/user/me - ::1
 [2025-05-19T22:56:39.958Z] INFO: GET /api/v1/slot - ::1
+[2025-05-19T22:58:23.500Z] INFO: GET /api/v1/user/me - ::1
+[2025-05-19T22:58:23.510Z] INFO: GET /api/v1/slot - ::1
+[2025-05-19T22:58:28.267Z] INFO: GET /api/v1/admin/dashboard - ::1
+[2025-05-19T22:58:32.562Z] INFO: GET /api/v1/admin/dashboard - ::1
+[2025-05-19T22:58:32.566Z] INFO: GET /api/v1/user/me - ::1
+[2025-05-19T22:59:25.021Z] INFO: GET /api/v1/user/me - ::1
+[2025-05-19T22:59:25.024Z] INFO: GET /api/v1/admin/dashboard - ::1
+[2025-05-19T23:08:30.228Z] INFO: GET /api/v1/user/me - ::1
+[2025-05-19T23:08:30.239Z] INFO: GET /api/v1/admin/dashboard - ::1
+[2025-05-19T23:08:32.672Z] INFO: GET /api/v1/slot - ::1
+[2025-05-19T23:08:33.324Z] INFO: GET /api/v1/requests/all - ::1
+[2025-05-19T23:08:33.378Z] INFO: GET /api/v1/slot/available - ::1
