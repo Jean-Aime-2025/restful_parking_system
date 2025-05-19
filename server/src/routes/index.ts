@@ -6,6 +6,8 @@ import adminDashboardRouter from "./admin-dahboard.route";
 import userDashboardRouter from "./user-dahboard.route";
 import vehicleRouter from "./vehicle.route";
 import parkingRequestsRouter from "./parking-requests";
+import { checkLoggedIn } from "../middlewares/auth.middleware";
+import userController from "../controllers/user.controller";
 
 const router = Router()
 
@@ -65,6 +67,5 @@ router.use("/vehicles", vehicleRouter
         }] 
     */
 )
-
 
 export default router

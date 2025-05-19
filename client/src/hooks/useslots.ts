@@ -5,7 +5,6 @@ import {
   deassignSlot,
   deleteSlot,
   getAvailableSlots,
-  // getAvailableSlots,
   getSlots,
   updateSlot,
   type CreateSlot,

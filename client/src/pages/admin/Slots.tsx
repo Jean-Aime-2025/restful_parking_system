@@ -13,8 +13,6 @@ export default function SlotPage() {
 
   const { data: slotsApiData, isLoading, isError } = useGetSlots();
 
-  console.log(slotsApiData);
-
   const slotsData: SlotDto[] = Array.isArray(slotsApiData)
     ? slotsApiData.map((slot) => ({
         id: slot.id,

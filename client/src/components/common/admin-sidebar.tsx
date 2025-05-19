@@ -1,6 +1,11 @@
-
 import * as React from 'react';
-import { ArrowUpCircleIcon, LayoutDashboardIcon, ListIcon, MailIcon } from 'lucide-react';
+import {
+  ArrowUpCircleIcon,
+  LayoutDashboardIcon,
+  ListIcon,
+  Loader2,
+  MailIcon,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { NavMain } from './nav-main';
@@ -14,6 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useGetUser } from '@/hooks/useUser';
 
 const adminNavItems = [
   {
@@ -36,6 +42,18 @@ const adminNavItems = [
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { data, isLoading, error } = useGetUser();
+
+  if (isLoading) {
+    return <Loader2 />;
+  }
+
+  if (error || !data || !data.data?.user) {
+    return <div>Error loading user info</div>;
+  }
+
+  const user = data.data.user;
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -59,9 +77,9 @@ export function AdminSidebar({
       <SidebarFooter>
         <NavUser
           user={{
-            name: 'Admin User',
-            email: 'admin@example.com',
-            avatar: '/avatars/admin.jpg',
+            name: user.names,
+            email: user.email,
+            avatar: user.profilePicture,
           }}
         />
       </SidebarFooter>

@@ -39,10 +39,16 @@ const getUserDashboard: any = async (req: AuthRequest, res: Response) => {
         };
       }
     }
+    // Vehicle count
+    const vehicleCount = await prisma.vehicle.count({
+      where: { userId },
+    });
+
     return res.json({
       recentRequests,
       pendingRequest, 
       pendingSlot,
+      vehicleCount
     });
   } catch (error: any) {
     return res.status(500).json({

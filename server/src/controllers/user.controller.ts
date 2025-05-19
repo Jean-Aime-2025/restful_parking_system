@@ -1,20 +1,20 @@
-import { compareSync, hashSync } from "bcrypt";
-import { config } from "dotenv";
-import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import prisma from "../../prisma/prisma-client";
-import { AuthRequest } from "../types";
-import ServerResponse from "../utils/ServerResponse";
-import { User } from "@prisma/client";
+import { compareSync, hashSync } from 'bcrypt';
+import { config } from 'dotenv';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import prisma from '../../prisma/prisma-client';
+import { AuthRequest } from '../types';
+import ServerResponse from '../utils/ServerResponse';
+import { User } from '@prisma/client';
 
 config();
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { email, names, telephone, password } = req.body;
-    console.log("body", req.body);
+    console.log('body', req.body);
     const hashedPassword = hashSync(password, 10);
-    console.log("hashedPassword", hashedPassword);
+    console.log('hashedPassword', hashedPassword);
     const user = await prisma.user.create({
       data: {
         email,
@@ -24,17 +24,23 @@ const createUser = async (req: Request, res: Response) => {
       },
     });
     const token = jwt.sign(
-      { id: user.id,role:user.role },
+      {
+        id: user.id,
+        role: user.role,
+        names: user.names,
+        email: user.email,
+        telephone: user.telephone,
+      },
       process.env.JWT_SECRET_KEY as string,
-      { expiresIn: "3d" }
+      { expiresIn: '3d' }
     );
-    return ServerResponse.created(res, "User created successfully", {
+    return ServerResponse.created(res, 'User created successfully', {
       user,
       token,
     });
   } catch (error: any) {
-    console.log("error", error);
-    if (error.code === "P2002") {
+    console.log('error', error);
+    if (error.code === 'P2002') {
       const key = error.meta.target[0];
       return ServerResponse.error(
         res,
@@ -44,7 +50,7 @@ const createUser = async (req: Request, res: Response) => {
         400
       );
     }
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -59,9 +65,9 @@ const updateUser: any = async (req: AuthRequest, res: Response) => {
         telephone,
       },
     });
-    return ServerResponse.success(res, "User updated successfully", { user });
+    return ServerResponse.success(res, 'User updated successfully', { user });
   } catch (error: any) {
-    if (error.code === "P2002") {
+    if (error.code === 'P2002') {
       const key = error.meta.target[0];
       return ServerResponse.error(
         res,
@@ -71,34 +77,45 @@ const updateUser: any = async (req: AuthRequest, res: Response) => {
         400
       );
     }
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
 const me: any = async (req: AuthRequest, res: Response) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    return ServerResponse.success(res, "User fetched successfully", { user });
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: {
+        parkingRequests: {
+          include: {
+            vehicle: true,
+          },
+        },
+        vehicles: true,
+        assignedSlot: true,
+      },
+    });
+    return ServerResponse.success(res, 'User fetched successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
 const all = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({});
-    return ServerResponse.success(res, "User updated successfully", { users });
+    return ServerResponse.success(res, 'User updated successfully', { users });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
 const getById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.params.id } });
-    return ServerResponse.success(res, "User fetched successfully", { user });
+    return ServerResponse.success(res, 'User fetched successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -106,20 +123,20 @@ const searchUser = async (req: Request, res: Response) => {
   try {
     const { query } = req.params;
     const users = await prisma.user.findMany({
-      where: { names: { contains: query, mode: "insensitive" } },
+      where: { names: { contains: query, mode: 'insensitive' } },
     });
-    return ServerResponse.success(res, "Users fetched successfully", { users });
+    return ServerResponse.success(res, 'Users fetched successfully', { users });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
 const deleteUser: any = async (req: AuthRequest, res: Response) => {
   try {
     const user = await prisma.user.delete({ where: { id: req.user.id } });
-    return ServerResponse.success(res, "User deleted successfully", { user });
+    return ServerResponse.success(res, 'User deleted successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -129,21 +146,21 @@ const removeAvatar: any = async (req: AuthRequest, res: Response) => {
       where: { id: req.user.id },
       data: {
         profilePicture:
-          "https://firebasestorage.googleapis.com/v0/b/relaxia-services.appspot.com/o/relaxia-profiles%2Fblank-profile-picture-973460_960_720.webp?alt=media",
+          'https://firebasestorage.googleapis.com/v0/b/relaxia-services.appspot.com/o/relaxia-profiles%2Fblank-profile-picture-973460_960_720.webp?alt=media',
       },
     });
-    return ServerResponse.success(res, "User updated successfully", { user });
+    return ServerResponse.success(res, 'User updated successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
 const deleteById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.delete({ where: { id: req.params.id } });
-    return ServerResponse.success(res, "User deleted successfully", { user });
+    return ServerResponse.success(res, 'User deleted successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -155,9 +172,9 @@ const updateAvatar: any = async (req: AuthRequest, res: Response) => {
         profilePicture: req.body.url,
       },
     });
-    return ServerResponse.success(res, "User updated successfully", { user });
+    return ServerResponse.success(res, 'User updated successfully', { user });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -165,10 +182,10 @@ const updatePassword: any = async (req: AuthRequest, res: Response) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user) ServerResponse.error(res, "User not found", 404);
+    if (!user) ServerResponse.error(res, 'User not found', 404);
     const isPasswordValid = compareSync(oldPassword, (user as User).password);
     if (!isPasswordValid)
-      return ServerResponse.error(res, "Invalid old password", 400);
+      return ServerResponse.error(res, 'Invalid old password', 400);
     const hashedPassword = hashSync(newPassword, 10);
     const updatedUser = await prisma.user.update({
       where: { id: req.user.id },
@@ -176,11 +193,11 @@ const updatePassword: any = async (req: AuthRequest, res: Response) => {
         password: hashedPassword,
       },
     });
-    return ServerResponse.success(res, "Password updated successfully", {
+    return ServerResponse.success(res, 'Password updated successfully', {
       user: updatedUser,
     });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 

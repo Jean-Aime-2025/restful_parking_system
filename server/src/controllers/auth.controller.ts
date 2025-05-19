@@ -1,13 +1,13 @@
-import { compare, compareSync, hash } from "bcrypt";
-import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import prisma from "../../prisma/prisma-client";
-import { AuthRequest } from "../types";
-import ServerResponse from "../utils/ServerResponse";
+import { compare, compareSync, hash } from 'bcrypt';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import prisma from '../../prisma/prisma-client';
+import { AuthRequest } from '../types';
+import ServerResponse from '../utils/ServerResponse';
 import {
   sendAccountVerificationEmail,
   sendPaswordResetEmail,
-} from "../utils/mail";
+} from '../utils/mail';
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -15,17 +15,23 @@ const login = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    if (!user) return ServerResponse.error(res, "Invalid email or password");
+    if (!user) return ServerResponse.error(res, 'Invalid email or password');
     const isMatch = compareSync(password, user.password);
-    if (!isMatch) return ServerResponse.error(res, "Invalid email or password");
+    if (!isMatch) return ServerResponse.error(res, 'Invalid email or password');
     const token = jwt.sign(
-      { id: user.id,role:user.role },
+      {
+        id: user.id,
+        role: user.role,
+        names: user.names,
+        email: user.email,
+        telephone: user.telephone,
+      },
       process.env.JWT_SECRET_KEY as string,
-      { expiresIn: "3d" }
+      { expiresIn: '3d' }
     );
-    return ServerResponse.success(res, "Login successful", { user, token });
+    return ServerResponse.success(res, 'Login successful', { user, token });
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -46,11 +52,11 @@ const initiateResetPassword = async (req: Request, res: Response) => {
     await sendPaswordResetEmail(email, user.names, passwordResetCode);
     return ServerResponse.success(
       res,
-      "Password reset email sent successfully"
+      'Password reset email sent successfully'
     );
   } catch (error) {
     console.log(error);
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -63,7 +69,7 @@ const resetPassword = async (req: Request, res: Response) => {
         passwordResetExpires: { gte: new Date() },
       },
     });
-    if (!user) return ServerResponse.error(res, "Invalid or expired code");
+    if (!user) return ServerResponse.error(res, 'Invalid or expired code');
     const hashedPassword = await hash(password, 10);
     await prisma.user.update({
       where: { id: user.id },
@@ -73,9 +79,9 @@ const resetPassword = async (req: Request, res: Response) => {
         passwordResetExpires: null,
       },
     });
-    return ServerResponse.success(res, "Password reset successfully");
+    return ServerResponse.success(res, 'Password reset successfully');
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -93,7 +99,7 @@ const initiateEmailVerification: any = async (
       data: {
         verificationCode,
         verificationExpires,
-        verificationStatus: "PENDING",
+        verificationStatus: 'PENDING',
       },
     });
     await sendAccountVerificationEmail(
@@ -101,9 +107,9 @@ const initiateEmailVerification: any = async (
       user.names,
       verificationCode
     );
-    return ServerResponse.success(res, "Verification email sent successfully");
+    return ServerResponse.success(res, 'Verification email sent successfully');
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 
@@ -116,18 +122,18 @@ const verifyEmail = async (req: Request, res: Response) => {
         verificationExpires: { gte: new Date() },
       },
     });
-    if (!user) return ServerResponse.error(res, "Invalid or expired code");
+    if (!user) return ServerResponse.error(res, 'Invalid or expired code');
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        verificationStatus: "VERIFIED",
+        verificationStatus: 'VERIFIED',
         verificationCode: null,
         verificationExpires: null,
       },
     });
-    return ServerResponse.success(res, "Verification successfully");
+    return ServerResponse.success(res, 'Verification successfully');
   } catch (error) {
-    return ServerResponse.error(res, "Error occured", { error });
+    return ServerResponse.error(res, 'Error occured', { error });
   }
 };
 

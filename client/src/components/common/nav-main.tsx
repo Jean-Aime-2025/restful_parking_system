@@ -92,7 +92,7 @@ export function NavMain({
                   </SidebarMenuButton>
                 </DialogTrigger>
 
-                <DialogContent className="sm:max-w-[700px] px-[3%] py-10">
+                <DialogContent className="sm:max-w-[700px] px-[3%] py-10 rounded-3xl">
                   <DialogHeader>
                     <DialogTitle className="text-3xl font-semibold">
                       Create New Request

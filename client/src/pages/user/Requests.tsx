@@ -9,10 +9,10 @@ const UserRequests = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: requests, isLoading } = useMyParkingRequests();
 
-  console.log(requests);
   const handleAddVehicle = () => {
     setDialogOpen(true);
   };
+
   return (
     <div className="p-6">
       <DataTable
@@ -21,7 +21,7 @@ const UserRequests = () => {
         searchEnabled
         isLoading={isLoading}
         addButtonIcon={<Plus className="w-5 h-5 text-white" />}
-        addButtonTitle="Add Requests"
+        addButtonTitle="Add Request"
         onAdd={handleAddVehicle}
         message="No Requests found"
       />

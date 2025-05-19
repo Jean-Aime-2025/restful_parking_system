@@ -8,11 +8,23 @@ export interface AdminDashboardData {
   occupiedSlots: number;
 }
 
-export interface UserDashboardData {
-  slotInfo: string;
-  slotStatus: string;
-  requestStatus: string;
+export interface Request {
+  id: string;
+  userId: string;
+  vehicleId: string;
+  status: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  notes: string;
 }
+
+export interface UserDashboardData {
+  pendingRequest: Request | null;
+  recentRequests: Request[];
+  vehicleCount: number
+}
+
 
 export const fetchAdminDashboard = (): Promise<AxiosResponse<AdminDashboardData>> => {
   return api.get('/admin/dashboard');

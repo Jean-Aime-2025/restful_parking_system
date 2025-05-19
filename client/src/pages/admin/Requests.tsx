@@ -16,9 +16,6 @@ const Requests = () => {
       createdAt: req.createdAt,
     })) ?? [];
 
-    console.log(requests);
-
-
   if (isError) {
     return (
       <div className="text-center text-red-500 font-medium">
