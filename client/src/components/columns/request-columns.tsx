@@ -6,12 +6,15 @@ import {
   useAcceptParkingRequest,
   useRejectParkingRequest,
 } from '@/hooks/useParkingRequest';
+import { useGetAvailableSlots } from '@/hooks/useslots';
 
 export type RequestDto = {
   id: string;
   requesterName: string;
   vehiclePlateNumber: string;
   createdAt: string;
+  status: string;
+  duration: string;
 };
 
 export const RequestsColumns: ColumnDef<RequestDto>[] = [
@@ -19,7 +22,7 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     accessorKey: 'requesterName',
     header: 'Name',
     cell: ({ row }) => (
-      <div className="font-medium">{row.original.requesterName}</div>
+      <div className="font-medium py-2">{row.original.requesterName}</div>
     ),
   },
   {
@@ -36,18 +39,38 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     },
   },
   {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <div className="capitalize font-medium">{row.original.status.toLowerCase()}</div>
+    ),
+  },
+  {
+    accessorKey: 'duration',
+    header: 'Duration',
+    cell: ({ row }) => <div>{row.original.duration}</div>,
+  },
+  {
     id: 'actions',
     header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { id, status } = row.original;
       const { mutate: accept } = useAcceptParkingRequest();
       const { mutate: reject } = useRejectParkingRequest();
+      const { data: availableSlots = [], isLoading } = useGetAvailableSlots();
+
+      // Only show actions if status is PENDING and slots are available
+      const isPending = status.toUpperCase() === 'PENDING';
+
+      if (!isPending || isLoading || availableSlots.length === 0) {
+        return null;
+      }
 
       return (
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={() => accept(row.original.id)}
+            onClick={() => accept(id)}
             title="Accept"
           >
             <Check size={16} />
@@ -62,5 +85,5 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
         </div>
       );
     },
-  },
+  }
 ];

@@ -169,7 +169,7 @@ const RequestParkingForm = ({ setOpen }: RequestParkingFormProps) => {
             <span>Submitting...</span>
           </div>
         ) : (
-          'Create Slot'
+          'Create request'
         )}
       </Button>
     </form>

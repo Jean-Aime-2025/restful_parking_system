@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, RequestHandler, Router } from "express";
+import { Router } from "express";
 import userController from "../controllers/user.controller";
 import {
   ChangePasswordDTO,
@@ -23,7 +23,7 @@ userRouter.put(
 );
 userRouter.get("/me", [checkLoggedIn], userController.me);
 userRouter.get("/all", [checkAdmin], userController.all);
-userRouter.get("/:id", [], userController.getById);
+userRouter.get("/:id", userController.getById);
 userRouter.get("/search/:query", [], userController.searchUser);
 userRouter.delete("/me", [checkLoggedIn], userController.deleteUser);
 userRouter.delete(

@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import nodemailer from 'nodemailer'
+import generateTicketPDF from './ticket';
 
 config();
 
@@ -83,32 +84,48 @@ const sendPaswordResetEmail = async (email: string, names: string, passwordReset
     }
 };
 
-const sendParkingRequestApprovedEmail = async (email: string, names: string, slotName: string) => {
+const sendParkingRequestApprovedEmail = async (
+    email: string,
+    names: string,
+    slotName: string,
+    startTime: Date,
+    endTime: Date
+) => {
     try {
+        const pdfBuffer = await generateTicketPDF(names, startTime, endTime, slotName);
+
         await transporter.sendMail({
             from: process.env.MAIL_USER,
             to: email,
-            subject: "Parking Request Approved",
+            subject: "Parking Request Approved - Ticket Attached",
             html: `
-                <html>
-                <body>
-                    <h2>Dear ${names},</h2>
-                    <p>Your parking request has been <strong>approved</strong>.</p>
-                    <p>Your assigned slot is: <strong>${slotName}</strong>.</p>
-                    <p>Thank you for using our service.</p>
-                    <br/>
-                    <p>Best regards,<br/>Parking Management Team</p>
-                </body>
-                </html>
-            `
+        <html>
+        <body>
+            <h2>Dear ${names},</h2>
+            <p>Your parking request has been <strong>approved</strong>.</p>
+            <p>Your assigned slot is: <strong>${slotName}</strong>.</p>
+            <p>Kindly find your ticket attached. Please keep it for your records.</p>
+            <br/>
+            <p>Best regards,<br/>Parking Management Team</p>
+        </body>
+        </html>
+      `,
+            attachments: [
+                {
+                    filename: 'Parking-Ticket.pdf',
+                    content: pdfBuffer,
+                    contentType: 'application/pdf',
+                },
+            ],
         });
 
-        return { message: "Approval email sent", status: true };
+        return { message: "Approval email with ticket sent", status: true };
     } catch (error) {
         console.error("Approval email error:", error);
         return { message: "Failed to send approval email", status: false };
     }
 };
+
 
 const sendParkingRequestRejectedEmail = async (email: string, names: string) => {
     try {

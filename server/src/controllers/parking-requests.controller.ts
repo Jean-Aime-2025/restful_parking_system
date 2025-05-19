@@ -112,9 +112,12 @@ const acceptRequestHandler = async (req: Request, res: Response) => {
       await sendParkingRequestApprovedEmail(
         user.email,
         user.names,
-        randomSlot.code || randomSlot.id
+        randomSlot.code || randomSlot.id,
+        request.startTime,
+        request.endTime
       );
-    } else {
+    }
+    else {
       console.warn(
         `User with ID ${request.userId} not found when sending approval email.`
       );

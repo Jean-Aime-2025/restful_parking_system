@@ -3,18 +3,29 @@
 import { RequestsColumns, type RequestDto } from '@/components/columns/request-columns';
 import { DataTable } from '@/components/common/data-table';
 import { useAllParkingRequests } from '@/hooks/useParkingRequest';
-// import { useGetAllRequests } from '@/hooks/useSlotRequest';
 
 const Requests = () => {
   const { data: requests, isLoading, isError } = useAllParkingRequests();
 
   const tableData: RequestDto[] =
-    requests?.map((req: any) => ({
-      id: req.id,
-      requesterName: req.user?.names ?? 'Unknown',
-      vehiclePlateNumber: req.vehicle?.platenumber ?? 'N/A',
-      createdAt: req.createdAt,
-    })) ?? [];
+    requests?.map((req: any) => {
+      const start = new Date(req.startTime);
+      const end = new Date(req.endTime);
+      const diffInMs = end.getTime() - start.getTime();
+      const durationInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+      return {
+        id: req.id,
+        requesterName: req.user?.names ?? 'Unknown',
+        vehiclePlateNumber: req.vehicle?.platenumber ?? 'N/A',
+        createdAt: req.createdAt,
+        status: req.status ?? 'UNKNOWN',
+        duration: `${durationInDays} day${durationInDays > 1 ? 's' : ''}`,
+      };
+    }) ?? [];
+
+
+  console.log(requests)
 
   if (isError) {
     return (

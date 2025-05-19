@@ -75,7 +75,7 @@ const updateVehicle:any = async (req: AuthRequest, res: Response) => {
   }
 };
 
-const deleteVehicle:any = async (req: AuthRequest, res: Response) => {
+const deleteVehicle: any = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -84,6 +84,14 @@ const deleteVehicle:any = async (req: AuthRequest, res: Response) => {
     if (!vehicle || vehicle.userId !== req.user.id)
       return res.status(404).json({ message: 'Vehicle not found' });
 
+    // Delete related parking requests first
+    await prisma.parkingRequest.deleteMany({
+      where: {
+        vehicleId: id,
+      },
+    });
+
+    // Then delete the vehicle
     await prisma.vehicle.delete({ where: { id } });
 
     return res.json({ message: 'Vehicle deleted successfully' });
@@ -91,6 +99,7 @@ const deleteVehicle:any = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ message: 'Failed to delete vehicle', error });
   }
 };
+
 
 const vehicleController = {
   createVehicle,

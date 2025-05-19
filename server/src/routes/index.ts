@@ -5,9 +5,7 @@ import slotRouter from "./slot.route";
 import adminDashboardRouter from "./admin-dahboard.route";
 import userDashboardRouter from "./user-dahboard.route";
 import vehicleRouter from "./vehicle.route";
-import parkingRequestsRouter from "./parking-requests";
-import { checkLoggedIn } from "../middlewares/auth.middleware";
-import userController from "../controllers/user.controller";
+import parkingRequestsRouter from "./parking-requests.route";
 
 const router = Router()
 

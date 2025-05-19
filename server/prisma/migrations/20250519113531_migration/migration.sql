@@ -45,7 +45,7 @@ CREATE TABLE "slots" (
 -- CreateTable
 CREATE TABLE "vehicles" (
     "id" TEXT NOT NULL,
-    "license" TEXT NOT NULL,
+    "platenumber" TEXT NOT NULL,
     "model" TEXT NOT NULL,
     "color" TEXT,
     "userId" TEXT NOT NULL,
@@ -81,7 +81,7 @@ CREATE UNIQUE INDEX "users_assignedSlotId_key" ON "users"("assignedSlotId");
 CREATE UNIQUE INDEX "slots_code_key" ON "slots"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "vehicles_license_key" ON "vehicles"("license");
+CREATE UNIQUE INDEX "vehicles_platenumber_key" ON "vehicles"("platenumber");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_assignedSlotId_fkey" FOREIGN KEY ("assignedSlotId") REFERENCES "slots"("id") ON DELETE SET NULL ON UPDATE CASCADE;

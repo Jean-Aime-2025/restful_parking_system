@@ -76,7 +76,7 @@ model Vehicle {
   userId     String
   createdAt  DateTime @default(now())
 
-  parkingRequests ParkingRequest[]
+  parkingRequests ParkingRequest[] 
 
   @@map("vehicles")
 }

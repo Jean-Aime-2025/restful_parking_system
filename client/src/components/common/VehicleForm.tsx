@@ -51,7 +51,7 @@ const VehicleForm = ({ setOpen }: Props) => {
       </div>
 
       <Button type="submit" disabled={createVehicle.isPending}>
-        {createVehicle.isPending ? 'Saving...' : 'Save'}
+        {createVehicle.isPending ? 'Creating...' : 'Create vehicle'}
       </Button>
     </form>
   );
