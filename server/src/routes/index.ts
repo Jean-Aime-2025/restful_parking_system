@@ -59,7 +59,7 @@ router.use("/dashboard", userDashboardRouter
 )
 router.use("/vehicles", vehicleRouter
     /*
-        #swagger.tags = ['user-dashboard']
+        #swagger.tags = ['vehicles']
         #swagger.security = [{
                 "bearerAuth": []
         }] 

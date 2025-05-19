@@ -35,3 +35,18 @@ export const getPendingRequests = async (): Promise<ParkingRequest[]> => {
   const response = await api.get('/requests/pending-requests');
   return response.data;
 };
+
+// Edit Parking Request
+export const editParkingRequest = async (
+  requestId: string,
+  data: Partial<Pick<ParkingRequest, 'startTime' | 'endTime' | 'notes'>>
+): Promise<{ message: string }> => {
+  const response = await api.patch(`/requests/edit/${requestId}`, data);
+  return response.data;
+};
+
+// Cancel Parking Request
+export const cancelParkingRequest = async (requestId: string): Promise<{ message: string }> => {
+  const response = await api.delete(`/requests/cancel/${requestId}`);
+  return response.data;
+};

@@ -24,8 +24,6 @@ export const requestColumns: ColumnDef<any>[] = [
     cell: ({ row }) =>
       <div>{new Date(row.original.endTime).toLocaleString()}</div>,
   },
-
-  // ✅ Hours Expected Column
   {
     id: 'hoursExpected',
     header: 'Hours Expected',
@@ -38,11 +36,6 @@ export const requestColumns: ColumnDef<any>[] = [
       return <div>{rounded} hrs</div>;
     },
   },
-
-  {
-    accessorKey: 'notes',
-    header: 'Notes',
-  },
   {
     accessorKey: 'status',
     header: 'Status',
@@ -54,13 +47,5 @@ export const requestColumns: ColumnDef<any>[] = [
 
       return <span className={`font-medium ${color}`}>{status}</span>;
     },
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created At',
-    cell: ({ row }) =>
-      <div className="text-muted-foreground">
-        {new Date(row.original.createdAt).toLocaleDateString()}
-      </div>,
   },
 ];

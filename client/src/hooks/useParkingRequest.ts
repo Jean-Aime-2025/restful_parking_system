@@ -7,6 +7,8 @@ import {
   acceptParkingRequest,
   rejectParkingRequest,
   getPendingRequests,
+  editParkingRequest,
+  cancelParkingRequest,
 } from '@/services/parkingRequest.service';
 import { toast } from 'sonner';
 
@@ -109,3 +111,42 @@ export const usePendingParkingRequests = () =>
     queryKey: ['pendingParkingRequests'],
     queryFn: getPendingRequests,
   });
+
+// Hook for editing a request
+export const useEditParkingRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      requestId,
+      data,
+    }: {
+      requestId: string;
+      data: { startTime: Date; endTime: Date; notes?: string };
+      //@ts-ignore
+    }) => editParkingRequest(requestId, data),
+    onSuccess: () => {
+      toast.success('Request updated successfully');
+      queryClient.invalidateQueries({ queryKey: ['myParkingRequests'] }); // refetch user requests
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error || 'Failed to update request');
+    },
+  });
+};
+
+// Hook for canceling a request
+export const useCancelParkingRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (requestId: string) => cancelParkingRequest(requestId),
+    onSuccess: () => {
+      toast.success('Request canceled successfully');
+      queryClient.invalidateQueries({ queryKey: ['myParkingRequests'] }); // refetch user requests
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.error || 'Failed to cancel request');
+    },
+  });
+};

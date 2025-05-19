@@ -32,7 +32,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
   {
     accessorKey: 'color',
     header: 'Color',
-    cell: ({ row }) => <div>{row.original.color}</div>,
+    cell: ({ row }) => <div>{row.original.color || '-'}</div>,
   },
   {
     accessorKey: 'createdAt',
