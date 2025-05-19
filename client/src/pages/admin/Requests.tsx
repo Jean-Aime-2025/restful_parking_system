@@ -24,9 +24,6 @@ const Requests = () => {
       };
     }) ?? [];
 
-
-  console.log(requests)
-
   if (isError) {
     return (
       <div className="text-center text-red-500 font-medium">

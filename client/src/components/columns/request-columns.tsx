@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { type ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { Check, X } from 'lucide-react';
+import { Check, Loader2, X } from 'lucide-react';
 import {
   useAcceptParkingRequest,
   useRejectParkingRequest,
 } from '@/hooks/useParkingRequest';
 import { useGetAvailableSlots } from '@/hooks/useslots';
+import { useState } from 'react';
 
 export type RequestDto = {
   id: string;
@@ -41,10 +42,25 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }) => (
-      <div className="capitalize font-medium">{row.original.status.toLowerCase()}</div>
-    ),
+    cell: ({ row }) => {
+      const status = row.original.status.toUpperCase();
+      const colorClass =
+        status === 'APPROVED'
+          ? 'text-green-600'
+          : status === 'REJECTED'
+            ? 'text-red-600'
+            : status === 'PENDING'
+              ? 'text-yellow-600'
+              : 'text-gray-500';
+
+      return (
+        <div className={`uppercase font-medium ${colorClass}`}>
+          {status.toLowerCase()}
+        </div>
+      );
+    },
   },
+
   {
     accessorKey: 'duration',
     header: 'Duration',
@@ -55,35 +71,62 @@ export const RequestsColumns: ColumnDef<RequestDto>[] = [
     header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
       const { id, status } = row.original;
+      const { data: availableSlots = [], isLoading: loadingSlots } = useGetAvailableSlots();
+
+      const [loadingAction, setLoadingAction] = useState<'accept' | 'reject' | null>(null);
+
       const { mutate: accept } = useAcceptParkingRequest();
       const { mutate: reject } = useRejectParkingRequest();
-      const { data: availableSlots = [], isLoading } = useGetAvailableSlots();
 
-      // Only show actions if status is PENDING and slots are available
       const isPending = status.toUpperCase() === 'PENDING';
 
-      if (!isPending || isLoading || availableSlots.length === 0) {
+      if (!isPending || loadingSlots || availableSlots.length === 0) {
         return null;
       }
+
+      const handleAccept = () => {
+        setLoadingAction('accept');
+        accept(id, {
+          onSettled: () => setLoadingAction(null),
+        });
+      };
+
+      const handleReject = () => {
+        setLoadingAction('reject');
+        reject(id, {
+          onSettled: () => setLoadingAction(null),
+        });
+      };
 
       return (
         <div className="flex justify-center gap-2">
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={() => accept(id)}
+            onClick={handleAccept}
             title="Accept"
+            disabled={loadingAction !== null}
           >
-            <Check size={16} />
+            {loadingAction === 'accept' ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Check size={16} />
+            )}
           </Button>
           <Button
             className="!px-[10px] !py-2 rounded-full"
-            onClick={() => reject(id)}
+            onClick={handleReject}
             title="Reject"
+            disabled={loadingAction !== null}
           >
-            <X size={16} />
+            {loadingAction === 'reject' ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <X size={16} />
+            )}
           </Button>
         </div>
       );
     },
   }
+
 ];
