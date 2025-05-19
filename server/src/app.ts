@@ -4,8 +4,6 @@ import { config } from 'dotenv';
 import express from 'express';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
-import authRouter from './routes/auth.route';
-import userRouter from './routes/user.route';
 import swaggerFile from './swagger/doc/swagger.json';
 import ServerResponse from './utils/ServerResponse';
 import router from './routes';
